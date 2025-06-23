@@ -5,8 +5,14 @@
     <nav class="nav">
       <router-link to="/">ホーム</router-link>
       <router-link to="/about">会社について</router-link>
-      <router-link to="/work">事業内容</router-link>
-      <router-link to="/contact">お問い合わせ</router-link>
+      <router-link to="/service">事業内容</router-link>
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSe2PINkLftLY7X-itxKiS6UBEqtpE9-yp7MIUkPRn7CWZxFfw/viewform?usp=sharing&ouid=100421410636369312984"
+        target="_blank"
+        rel="noopener"
+      >
+        お問い合わせ
+      </a>
       <router-link to="/privacy">プライバシーポリシー</router-link>
     </nav>
   </header>

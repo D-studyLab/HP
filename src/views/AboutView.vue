@@ -1,42 +1,52 @@
 <!-- src/views/AboutView.vue -->
- <template>
+<template>
   <div class="about">
     <h2>会社について</h2>
-    <h3>事業背景</h3>
     <p>
-      子ども向け情報教育市場は352億円（前年比+38.7%）に拡大し、
-      共通テストに「情報Ⅰ」が追加されたことで需要が増加。
-    </p>
-    <p>
-      一方、塾業界では少子化と大手寡占で退出が進んでおり、
-      単純教科指導だけでは価格競争に巻き込まれています。
+      D-Study Labは、テクノロジーと教育を融合し、<br>
+      「自分で考え、手を動かし、成果を出す力」を育むことをミッションとしています。
     </p>
     <h3>ミッション</h3>
-    <p>
-      プログラミングと試験対策を両立し、
-      生徒の“実績”を可視化。社会で即戦力となるITリテラシーを育む塾運営。
-    </p>
+    <ul>
+      <li>主体的な学びの場を作る</li>
+      <li>実践的なプロジェクト体験を通じて自信を育む</li>
+      <li>地域社会のIT化を担う人材を輩出する</li>
+    </ul>
+    <h3>会社概要</h3>
+    <table>
+      <tbody>
+        <tr><th>社名</th><td>D-Study Lab</td></tr>
+        <tr><th>所在地</th><td>岩手県盛岡市〇丁目〇番地</td></tr>
+        <tr><th>設立</th><td>2025年5月</td></tr>
+        <tr><th>代表</th><td>山田 太郎</td></tr>
+        <tr><th>事業内容</th><td>情報＆プログラミング専門塾、オンライン講座運営、<br>教育コンテンツ開発</td></tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <style scoped>
 .about {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: left;
+  max-width: 800px;
+  margin: auto;
   padding: 2rem;
+  line-height: 1.6;
 }
 .about h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
 }
 .about h3 {
-  font-size: 1.4rem;
   margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
 }
-.about p {
-  line-height: 1.6;
-  margin-bottom: 1rem;
+.about table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.about th, .about td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 </style>
