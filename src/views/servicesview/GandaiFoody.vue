@@ -1,11 +1,10 @@
 <!-- src/views/works/GandaiFoody.vue -->
- <template>
+<template>
   <div class="project gandaifoody">
     <h2>岩大FOODY ― 学食栄養管理アプリ</h2>
     <p>
       岩手大学の学食メニューをカレンダー形式で表示し、
-      それぞれの栄養素（エネルギー、たんぱく質、脂質など）を
-      簡単にチェックできるアプリです。
+      それぞれの栄養素（エネルギー、たんぱく質、脂質など）を 簡単にチェックできるアプリです。
     </p>
     <ul>
       <li>今日のメニューをひと目で確認</li>
@@ -25,28 +24,27 @@
   </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
-.project {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-  line-height: 1.6;
-}
-.gandaifoody h2 {
-  margin-bottom: 1rem;
-}
-.gandaifoody ul {
-  list-style: disc inside;
-  margin-top: 1rem;
-}
-.gandaifoody a {
-  color: #646cff;
-  text-decoration: none;
-}
-.gandaifoody a:hover {
-  text-decoration: underline;
-}
+  .project {
+    max-width: 800px;
+    margin: auto;
+    padding: 2rem;
+    line-height: 1.6;
+  }
+  .gandaifoody h2 {
+    margin-bottom: 1rem;
+  }
+  .gandaifoody ul {
+    list-style: disc inside;
+    margin-top: 1rem;
+  }
+  .gandaifoody a {
+    color: #646cff;
+    text-decoration: none;
+  }
+  .gandaifoody a:hover {
+    text-decoration: underline;
+  }
 </style>

@@ -1,6 +1,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import LP from '../views/LP.vue'
 import PrivacyPolicyView from '../views/PrivacyPolicyView.vue'
 import Chillsta from '../views/servicesview/ChillSta.vue'
 import GandaiFoody from '../views/servicesview/GandaiFoody.vue'
@@ -9,8 +9,8 @@ import InfoProg from '../views/servicesview/InfoProg.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: HomeView,
+    name: 'LP',
+    component: LP,
   },
   {
     path: '/privacy',

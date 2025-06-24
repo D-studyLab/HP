@@ -1,5 +1,5 @@
 <!-- src/views/works/ChillSta.vue -->
- <template>
+<template>
   <div class="project chillsta">
     <h2>ChillSta ― ポモドーロタイマー</h2>
     <p>
@@ -25,28 +25,28 @@
 </template>
 
 <script setup>
-// （特にスクリプトは不要な場合、省略可）
+  // （特にスクリプトは不要な場合、省略可）
 </script>
 
 <style scoped>
-.project {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-  line-height: 1.6;
-}
-.chillsta h2 {
-  margin-bottom: 1rem;
-}
-.chillsta ul {
-  list-style: disc inside;
-  margin-top: 1rem;
-}
-.chillsta a {
-  color: #646cff;
-  text-decoration: none;
-}
-.chillsta a:hover {
-  text-decoration: underline;
-}
+  .project {
+    max-width: 800px;
+    margin: auto;
+    padding: 2rem;
+    line-height: 1.6;
+  }
+  .chillsta h2 {
+    margin-bottom: 1rem;
+  }
+  .chillsta ul {
+    list-style: disc inside;
+    margin-top: 1rem;
+  }
+  .chillsta a {
+    color: #646cff;
+    text-decoration: none;
+  }
+  .chillsta a:hover {
+    text-decoration: underline;
+  }
 </style>
