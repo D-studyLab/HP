@@ -33,11 +33,14 @@
 
   <!-- ============== モバイル レイアウト ============== -->
   <div v-else class="sp">
+    <!-- ヘッダー（文書フロー内。スクロールしたら一緒に流れる） -->
     <header class="sp-header">
       <img :src="logo" class="sp-logo" alt="logo" />
+      <h2 class="logo-title">D-StudyLab</h2>
       <button class="hamburger" @click="drawer = true"><i class="fas fa-bars"></i></button>
     </header>
 
+    <!-- ドロワー -->
     <transition name="slide">
       <aside v-if="drawer" class="drawer" @click.self="drawer = false">
         <div class="drawer-panel">
@@ -65,6 +68,7 @@
       </aside>
     </transition>
 
+    <!-- LP 本体 -->
     <Lp :mobile="true" />
   </div>
 </template>
@@ -77,7 +81,7 @@
   const isMobile = ref(window.innerWidth < 768)
   const drawer = ref(false)
 
-  const onResize = () => {
+  function onResize() {
     isMobile.value = window.innerWidth < 768
     if (!isMobile.value) drawer.value = false
   }
@@ -108,10 +112,14 @@
     text-decoration: none;
     color: inherit;
   }
+
+  :root {
+    --sp-header-h: 64px;
+  } /* モバイルヘッダー高さ */
 </style>
 
 <style scoped>
-  /* ---------- PC レイアウト ---------- */
+  /* ---------- PC ---------- */
   .pc {
     display: grid;
     grid-template-columns: 70px 220px 1fr;
@@ -174,14 +182,15 @@
     transform: translateX(6px);
   }
 
-  /* ---------- モバイル レイアウト ---------- */
+  /* ---------- SP：ヘッダー + LP を縦 flex で並べる ---------- */
+  .sp {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
   .sp-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    z-index: 900;
+    height: var(--sp-header-h);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -190,7 +199,7 @@
     backdrop-filter: blur(6px);
   }
   .sp-logo {
-    height: 36px;
+    height: calc(var(--sp-header-h) - 22px);
   }
   .hamburger {
     width: 44px;
@@ -201,6 +210,7 @@
     font-size: 1.25rem;
   }
 
+  /* ドロワ周りはそのまま */
   .slide-enter-from {
     transform: translateX(100%);
     opacity: 0;

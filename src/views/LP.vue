@@ -1,11 +1,10 @@
 <template>
-  <!-- PC では .main-scroll、SP では .sp-main を付与してもらう -->
   <main :class="mobile ? 'sp-main' : 'main-scroll'">
     <!-- ─── Hero ─────────────────────────────── -->
     <section id="top" class="hero">
       <h1>D-Study Lab</h1>
       <p>
-        私たち D-Study Lab は、あなたが「学びたい」を形にするための会社です。<br />
+        私たち D-Study Lab は、あなたが〈学びたい〉を形にするための会社です。<br />
         中高生向けの<strong>情報＆プログラミング専門塾</strong>を基盤に、<br />
         地域の教育格差解消や、社会人のリスキリング支援など、<br />
         幅広い「学びの場」を提供します。
@@ -35,18 +34,24 @@
     <!-- ─── Contact ─────────────────────────── -->
     <section id="contact">
       <h2>Contact</h2>
-      <p>お問い合わせは LINE 公式またはフォームからお願いします。</p>
+      <p>
+        ご質問・ご相談は
+        <strong>SNS の DM</strong> または
+        <a href="https://forms.gle/wntBVeFxG1rVouGY6" target="_blank" rel="noopener"
+          >お問い合わせフォーム</a
+        >
+        からお気軽にどうぞ。
+      </p>
     </section>
   </main>
 </template>
 
 <script setup>
-  /* App.vue から渡ってくるフラグ */
   defineProps({ mobile: { type: Boolean, default: false } })
 </script>
 
 <style scoped>
-  /* ========= スクロール領域（PC／SP 共通） ========= */
+  /* ========= スクロール領域 ========= */
   .main-scroll {
     height: 100vh;
     overflow-y: auto;
@@ -54,15 +59,13 @@
     background: #fff;
   }
   .sp-main {
-    /* ヘッダー 70px の下に配置される想定 */
-    height: calc(100vh - 70px);
+    flex: 1 1 auto;
     overflow-y: auto;
-    padding: 0 1rem 3rem;
+    padding: 1rem 1rem 3rem;
     background: #fff;
-    padding-top: 2rem;
   }
 
-  /* ========= LP コンテンツ ========== */
+  /* ========= コンテンツ ========= */
   section + section {
     margin-top: 2.5rem;
   }
@@ -76,5 +79,10 @@
   }
   a {
     color: var(--link, #0066cc);
+  }
+
+  /* リンク強調（任意） */
+  a:hover {
+    text-decoration: underline;
   }
 </style>
