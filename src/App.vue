@@ -16,8 +16,10 @@
 
     <!-- サイドナビ -->
     <nav class="sidenav">
-      <img :src="logo" class="logo-img" alt="logo" />
-      <h2 class="logo-title">D-StudyLab</h2>
+      <div class="logo-container" @click="goto('#top')">
+        <img :src="logo" class="logo-img" alt="logo" />
+        <h2 class="logo-title">D-StudyLab</h2>
+      </div>
 
       <ul class="nav-list">
         <li><button @click="goto('#top')">Top</button></li>
@@ -37,8 +39,10 @@
   <div v-else class="sp">
     <!-- ヘッダー（文書フロー内。スクロールしたら一緒に流れる） -->
     <header class="sp-header">
-      <img :src="logo" class="sp-logo" alt="logo" />
-      <h2 class="logo-title">D-StudyLab</h2>
+      <div class="logo-container" @click="goto('#top')">
+        <img :src="logo" class="sp-logo" alt="logo" />
+        <h2 class="logo-title">D-StudyLab</h2>
+      </div>
       <button class="hamburger" @click="drawer = true"><i class="fas fa-bars"></i></button>
     </header>
 
@@ -107,13 +111,24 @@
 </script>
 
 <style>
+  :root {
+    --bg-color: #0a0a1a;
+    --primary-color: #00aaff;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #e0e0e0;
+    --title-color: #ffffff;
+    --sp-header-h: 64px;
+  }
+
   html,
   body {
     height: 100vh;
     margin: 0;
     overflow: hidden; /* ページ全体のスクロールを禁止 */
-    background: #f9f9f9;
+    background: var(--bg-color);
     font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text-color);
   }
   button {
     border: none;
@@ -124,10 +139,6 @@
     text-decoration: none;
     color: inherit;
   }
-
-  :root {
-    --sp-header-h: 64px;
-  } /* モバイルヘッダー高さ */
 </style>
 
 <style scoped>
@@ -163,6 +174,17 @@
     justify-content: center;
     gap: 1.6rem;
   }
+  .logo-container {
+    cursor: pointer;
+    display: flex; /* Default to horizontal for mobile */
+    align-items: center;
+    gap: 0.8rem; /* Spacing for horizontal layout */
+  }
+  .pc .logo-container { /* PC-specific override for vertical layout */
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem; /* Spacing for vertical layout */
+  }
   .logo-img {
     width: 80px;
     height: 80px;
@@ -170,9 +192,16 @@
     object-fit: cover;
   }
   .logo-title {
-    margin: 0;
+    margin: 0; /* Reset margin as gap handles spacing */
     font-size: 1.4rem;
     font-weight: 700;
+    color: var(--title-color); /* PC版のタイトル色 */
+  }
+  .pc .logo-title {
+    margin-top: 0; /* PC版ではgapで調整するためmargin-topをリセット */
+  }
+  .sp-header .logo-title {
+    color: var(--bg-color); /* スマホ版のタイトル色 */
   }
   .nav-list {
     list-style: none;
@@ -214,14 +243,22 @@
   }
   .sp-logo {
     height: calc(var(--sp-header-h) - 22px);
+    border-radius: 50%; /* スマホ版ロゴを円形に */
+    object-fit: cover; /* スマホ版ロゴを円形に */
   }
   .hamburger {
-    width: 44px;
-    height: 44px;
-    border-radius: 6px;
-    background: #000;
-    color: #fff;
-    font-size: 1.25rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+  }
+  .hamburger:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--primary-color);
   }
 
   /* ---------- スクロール領域 ---------- */
@@ -237,40 +274,61 @@
   }
   .slide-enter-active,
   .slide-leave-active {
-    transition: all 0.25s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
   .drawer {
     position: fixed;
     inset: 0;
     z-index: 999;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.8); /* より深い背景色 */
     display: flex;
     justify-content: flex-end;
+    backdrop-filter: blur(5px);
   }
   .drawer-panel {
     width: 80%;
-    max-width: 300px;
+    max-width: 320px;
     height: 100%;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.08); /* グラスモーフィズム */
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px 0 0 16px; /* 角を丸く */
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem 1rem;
-    gap: 1.5rem;
+    padding: 4rem 1rem 2rem 1rem; /* Increased top padding */
+    gap: 2rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.4), inset 2px 0 15px rgba(0, 170, 255, 0.2);
   }
   .close {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 1.25rem;
+    top: 20px; /* Adjusted top */
+    right: 15px;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+  }
+  .close:hover {
+    transform: rotate(90deg) scale(1.1);
+    text-shadow: 0 0 15px var(--primary-color);
   }
   .drawer-sns {
     display: flex;
-    gap: 1.2rem;
+    gap: 1.8rem;
+    margin-bottom: 2.5rem; /* Increased margin-bottom */
   }
   .drawer-sns i {
-    font-size: 1.4rem;
+    font-size: 2rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+  .drawer-sns i:hover {
+    color: var(--primary-color);
+    transform: translateY(-5px) scale(1.1);
+    text-shadow: 0 0 20px var(--primary-color);
   }
   .drawer-nav ul {
     list-style: none;
@@ -278,11 +336,38 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1.5rem;
     align-items: center;
+    width: 100%;
   }
   .drawer-nav button {
-    font-size: 1.1rem;
-    text-align: left;
+    font-size: 1.3rem;
+    text-align: center;
+    color: var(--text-color);
+    padding: 0.8rem 1.5rem; /* Added horizontal padding */
+    width: 100%; /* Set to 100% */
+    box-sizing: border-box; /* Added box-sizing */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .drawer-nav button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 170, 255, 0.1), transparent);
+    transition: all 0.4s ease;
+  }
+  .drawer-nav button:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+    transform: translateX(5px);
+  }
+  .drawer-nav button:hover::before {
+    left: 100%;
   }
 </style>
