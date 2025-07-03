@@ -327,6 +327,11 @@ onUnmounted(() => {
   text-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
+.main-catchphrase .highlight {
+  color: var(--primary-color);
+  text-shadow: 0 0 15px var(--primary-color);
+}
+
 .sub-catchphrase {
   font-size: clamp(1rem, 2vw, 1.25rem);
   margin-bottom: 3rem;
