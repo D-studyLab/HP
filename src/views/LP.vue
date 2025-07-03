@@ -77,6 +77,12 @@
             <p class="price">32,000円 / コース</p>
           </div>
           <div class="course-card">
+            <h4>個別指導〈フレキシブル〉</h4>
+            <p class="target">高校生（経験者）</p>
+            <p class="description">学校課題や疑問をその場で解決。必要な時に必要なだけ学べます。</p>
+            <p class="price">2,500円 / 1コマ</p>
+          </div>
+          <div class="course-card">
             <h4>集団講座〈共テ対策・冬季集中〉</h4>
             <p class="target">高3生</p>
             <p class="description">共テ過去問・予想問題に集中して取り組み、得点力を一気に高めます。</p>
@@ -93,6 +99,12 @@
             <p class="target">初心者 (中高生〜社会人)</p>
             <p class="description">Python/JSの基礎からミニアプリ開発まで。自作アプリの公開を目指します。</p>
             <p class="price">36,000円 / コース</p>
+          </div>
+          <div class="course-card">
+            <h4>個別サポート〈フレキシブル〉</h4>
+            <p class="target">中高生〜社会人</p>
+            <p class="description">コードレビューやバグ相談など、あなたの課題をその場で解決します。</p>
+            <p class="price">3,000円 / 1コマ</p>
           </div>
           <div class="course-card">
             <h4>グループ開発ラボ</h4>
@@ -159,7 +171,7 @@
 
     <footer class="lp-footer">
       <a href="https://www.notion.so/2250aa0158188050b29ffaffc3849db7?source=copy_link" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
-      <p>&copy; 2024 D-study Lab. All Rights Reserved.</p>
+      <p>&copy; 2025 D-study Lab. All Rights Reserved.</p>
     </footer>
   </div>
 </template>
@@ -231,27 +243,31 @@ onUnmounted(() => {
 }
 
 .section-title {
-  font-size: 3rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   text-align: center;
   margin-bottom: 1rem;
   font-weight: 700;
   color: var(--title-color);
+  line-height: 1.2; /* 行間調整 */
 }
 
 .section-subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   font-weight: 400;
   color: var(--primary-color);
+  line-height: 1.4; /* 行間調整 */
 }
 
 .section-description {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   color: #a0a0b0;
   margin-bottom: 4rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6; /* 行間調整 */
+  word-break: break-word; /* 長い単語の改行 */
 }
 
 /* Scroll Animation */
@@ -300,27 +316,23 @@ onUnmounted(() => {
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 900px;
+  max-width: 1080px;
 }
 
 .main-catchphrase {
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.3;
   text-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-.main-catchphrase .highlight {
-  color: var(--primary-color);
-  text-shadow: 0 0 15px var(--primary-color);
-}
-
 .sub-catchphrase {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   margin-bottom: 3rem;
   line-height: 1.7;
   color: #c0c0d0;
+  word-break: break-word; /* 長い単語の改行 */
 }
 
 .cta-button {
@@ -389,14 +401,15 @@ onUnmounted(() => {
 }
 
 .problem-card {
-  width: 320px;
+  width: 400px;
 }
 
 .problem-card h3 {
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
   margin-bottom: 1rem;
   color: var(--title-color);
   text-align: center;
+  line-height: 1.4; /* 行間調整 */
 }
 
 /* 3. Solution Section */
@@ -413,7 +426,7 @@ onUnmounted(() => {
 }
 
 .feature-card {
-  width: 340px;
+  width: 400px;
   text-align: center;
 }
 
@@ -424,9 +437,10 @@ onUnmounted(() => {
 }
 
 .feature-card h3 {
-  font-size: 1.6rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.6rem);
   margin-bottom: 1rem;
   color: var(--title-color);
+  line-height: 1.4; /* 行間調整 */
 }
 
 /* 4. Courses Section */
@@ -436,12 +450,13 @@ onUnmounted(() => {
 }
 
 .course-category h3 {
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
   margin-bottom: 3rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--primary-color);
   display: inline-block;
   color: var(--title-color);
+  line-height: 1.2; /* 行間調整 */
 }
 
 .course-cards {
@@ -459,30 +474,35 @@ onUnmounted(() => {
 }
 
 .course-card h4 {
-  font-size: 1.5rem;
+  font-size: clamp(1.3rem, 2vw, 1.5rem);
   margin-bottom: 0.5rem;
   color: var(--primary-color);
+  line-height: 1.3; /* 行間調整 */
 }
 
 .course-card .target {
   font-weight: bold;
   color: #ff9f61;
   margin-bottom: 1rem;
+  line-height: 1.4; /* 行間調整 */
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .course-card .description {
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  line-height: 1.6; /* 行間調整 */
   margin-bottom: 1.5rem;
   flex-grow: 1;
   color: #c0c0d0;
+  word-break: break-word; /* 長い単語の改行 */
 }
 
 .course-card .price {
-  font-size: 1.6rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.6rem);
   font-weight: bold;
   text-align: right;
   color: var(--title-color);
+  line-height: 1.2; /* 行間調整 */
 }
 
 /* 5. Flow Section */
@@ -577,20 +597,22 @@ onUnmounted(() => {
 }
 
 .closing-message {
-  font-size: 2.8rem;
+  font-size: clamp(2rem, 4vw, 2.8rem);
   font-weight: bold;
   margin-bottom: 1.5rem;
   color: var(--title-color);
+  line-height: 1.3; /* 行間調整 */
 }
 
 .closing-section p {
-  font-size: 1.2rem;
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.7; /* 行間調整 */
   margin-bottom: 3rem;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
   color: #c0c0d0;
+  word-break: break-word; /* 長い単語の改行 */
 }
 
 /* Footer */
@@ -614,9 +636,6 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .section-title { font-size: 2.2rem; }
-  .main-catchphrase { font-size: 2.5rem; }
-  
   .problem-section, .solution-section, .courses-section, .flow-section, .closing-section {
     padding: 4rem 1rem;
   }

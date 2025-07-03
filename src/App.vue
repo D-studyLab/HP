@@ -176,14 +176,15 @@
   }
   .logo-container {
     cursor: pointer;
-    display: flex; /* Default to horizontal for mobile */
+    display: flex;
     align-items: center;
-    gap: 0.8rem; /* Spacing for horizontal layout */
+    gap: 0.8rem;
   }
-  .pc .logo-container { /* PC-specific override for vertical layout */
+  .pc .logo-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem; /* Spacing for vertical layout */
+    gap: 0.5rem;
   }
   .logo-img {
     width: 80px;
