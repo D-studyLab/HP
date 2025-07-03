@@ -27,8 +27,10 @@
       </ul>
     </nav>
 
-    <!-- LP 本体 -->
-    <Lp :mobile="false" />
+    <!-- LP 本体 (スクロール領域) -->
+    <main class="content">
+      <Lp :mobile="false" />
+    </main>
   </div>
 
   <!-- ============== モバイル レイアウト ============== -->
@@ -68,8 +70,10 @@
       </aside>
     </transition>
 
-    <!-- LP 本体 -->
-    <Lp :mobile="true" />
+    <!-- LP 本体 (スクロール領域) -->
+    <main class="content">
+      <Lp :mobile="true" />
+    </main>
   </div>
 </template>
 
@@ -90,7 +94,15 @@
 
   function goto(hash) {
     drawer.value = false
-    document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+    // main.content をスクロールさせる
+    const container = document.querySelector('.content')
+    const target = document.querySelector(hash)
+    if (container && target) {
+      container.scrollTo({
+        top: target.offsetTop,
+        behavior: 'smooth'
+      })
+    }
   }
 </script>
 
@@ -99,7 +111,7 @@
   body {
     height: 100vh;
     margin: 0;
-    overflow: hidden;
+    overflow: hidden; /* ページ全体のスクロールを禁止 */
     background: #f9f9f9;
     font-family: 'Noto Sans JP', sans-serif;
   }
@@ -123,12 +135,14 @@
   .pc {
     display: grid;
     grid-template-columns: 70px 220px 1fr;
-    height: 100%;
+    height: 100vh; /* 高さを100vhに固定 */
   }
-  .pc .rail {
+  .pc .rail, .pc .sidenav {
     position: sticky;
     top: 0;
     height: 100vh;
+  }
+  .pc .rail {
     background: #000;
     color: #fff;
     display: flex;
@@ -141,9 +155,6 @@
     font-size: 1.4rem;
   }
   .pc .sidenav {
-    position: sticky;
-    top: 0;
-    height: 100vh;
     background: #111;
     color: #fff;
     display: flex;
@@ -155,6 +166,8 @@
   .logo-img {
     width: 80px;
     height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   .logo-title {
     margin: 0;
@@ -186,17 +199,18 @@
   .sp {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+    height: 100vh; /* 高さを100vhに固定 */
   }
   .sp-header {
     height: var(--sp-header-h);
+    flex-shrink: 0; /* ヘッダーが縮まないようにする */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
     background: #ffffffee;
     backdrop-filter: blur(6px);
+    z-index: 10;
   }
   .sp-logo {
     height: calc(var(--sp-header-h) - 22px);
@@ -210,8 +224,14 @@
     font-size: 1.25rem;
   }
 
-  /* ドロワ周りはそのまま */
-  .slide-enter-from {
+  /* ---------- スクロール領域 ---------- */
+  .content {
+    overflow-y: auto; /* この領域だけ縦スクロールを許可 */
+    height: 100%;
+  }
+
+  /* ---------- ドロワー ---------- */
+  .slide-enter-from, .slide-leave-to {
     transform: translateX(100%);
     opacity: 0;
   }
@@ -219,11 +239,6 @@
   .slide-leave-active {
     transition: all 0.25s ease;
   }
-  .slide-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
   .drawer {
     position: fixed;
     inset: 0;
