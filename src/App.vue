@@ -16,22 +16,23 @@
 
     <!-- サイドナビ -->
     <nav class="sidenav">
-      <div class="logo-container" @click="goto('#top')">
+      <div class="logo-container" @click="goto('/')">
         <img :src="logo" class="logo-img" alt="logo" />
         <h2 class="logo-title">D-StudyLab</h2>
       </div>
 
       <ul class="nav-list">
-        <li><button @click="goto('#top')">Top</button></li>
-        <li><button @click="goto('#about')">About</button></li>
-        <li><button @click="goto('#services')">Services</button></li>
-        <li><button @click="goto('#contact')">Contact</button></li>
+        <li><button @click="goto('/#top')">Top</button></li>
+        <li><button @click="goto('/#about')">About</button></li>
+        <li><button @click="goto('/#services')">Services</button></li>
+        <li><button @click="goto('/#events')">News</button></li>
+        <li><button @click="goto('/#contact')">Contact</button></li>
       </ul>
     </nav>
 
     <!-- LP 本体 (スクロール領域) -->
     <main class="content">
-      <Lp :mobile="false" />
+      <router-view :mobile="false" />
     </main>
   </div>
 
@@ -39,7 +40,7 @@
   <div v-else class="sp">
     <!-- ヘッダー（文書フロー内。スクロールしたら一緒に流れる） -->
     <header class="sp-header">
-      <div class="logo-container" @click="goto('#top')">
+      <div class="logo-container" @click="goto('/')">
         <img :src="logo" class="sp-logo" alt="logo" />
         <h2 class="logo-title">D-StudyLab</h2>
       </div>
@@ -64,10 +65,11 @@
 
           <nav class="drawer-nav">
             <ul>
-              <li><button @click="goto('#top')">Top</button></li>
-              <li><button @click="goto('#about')">About</button></li>
-              <li><button @click="goto('#services')">Services</button></li>
-              <li><button @click="goto('#contact')">Contact</button></li>
+              <li><button @click="goto('/#top')">Top</button></li>
+              <li><button @click="goto('/#about')">About</button></li>
+              <li><button @click="goto('/#services')">Services</button></li>
+              <li><button @click="goto('/#events')">News</button></li>
+              <li><button @click="goto('/#contact')">Contact</button></li>
             </ul>
           </nav>
         </div>
@@ -76,18 +78,20 @@
 
     <!-- LP 本体 (スクロール領域) -->
     <main class="content">
-      <Lp :mobile="true" />
+      <router-view :mobile="true" />
     </main>
   </div>
 </template>
 
 <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
-  import Lp from './views/LP.vue'
+  import { useRouter, useRoute } from 'vue-router'
   import logo from './assets/D-studyLab_logo.png'
 
   const isMobile = ref(window.innerWidth < 768)
   const drawer = ref(false)
+  const router = useRouter()
+  const route = useRoute()
 
   function onResize() {
     isMobile.value = window.innerWidth < 768
@@ -96,16 +100,21 @@
   onMounted(() => window.addEventListener('resize', onResize))
   onBeforeUnmount(() => window.removeEventListener('resize', onResize))
 
-  function goto(hash) {
+  async function goto(path) {
     drawer.value = false
-    // main.content をスクロールさせる
-    const container = document.querySelector('.content')
-    const target = document.querySelector(hash)
-    if (container && target) {
-      container.scrollTo({
-        top: target.offsetTop,
-        behavior: 'smooth'
-      })
+    await router.push(path)
+
+    if (path.includes('#')) {
+      const hash = path.substring(path.indexOf('#'))
+      await new Promise(resolve => setTimeout(resolve, 50));
+      const target = document.querySelector(hash)
+      const container = document.querySelector('.content')
+      if (container && target) {
+        container.scrollTo({
+          top: target.offsetTop,
+          behavior: 'smooth'
+        })
+      }
     }
   }
 </script>

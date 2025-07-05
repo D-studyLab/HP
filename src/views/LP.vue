@@ -157,6 +157,29 @@
       </ol>
     </section>
 
+    <!-- News & Events Section -->
+    <section id="events" ref="eventsSection" class="events-section fade-in-section">
+      <h2 class="section-title">News & Events</h2>
+      <div v-if="events.length > 0" class="swiper-container">
+        <swiper
+          :slides-per-view="'auto'"
+          :space-between="30"
+          :centered-slides="true"
+          :loop="events.length > 1"
+          :modules="[Pagination]"
+          :pagination="{ el: '.swiper-pagination-custom', clickable: true }"
+        >
+          <swiper-slide v-for="event in events" :key="event.id">
+            <EventCard :event="event" />
+          </swiper-slide>
+        </swiper>
+        <div class="swiper-pagination-custom"></div> <!-- カスタムページネーション要素 -->
+      </div>
+      <div v-else class="no-events">
+        <p>現在、新しいイベントはありません。しばらくお待ちください。</p>
+      </div>
+    </section>
+
     <!-- 6. クロージング -->
     <section id="contact" ref="closingSection" class="closing-section fade-in-section">
       <h2 class="closing-message">さあ、挑戦への一歩を踏み出そう。</h2>
@@ -178,6 +201,12 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { events } from '@/data/events.js';
+import EventCard from '@/components/EventCard.vue';
 
 // Scroll Animation
 const heroSection = ref(null);
@@ -185,6 +214,7 @@ const problemSection = ref(null);
 const solutionSection = ref(null);
 const coursesSection = ref(null);
 const flowSection = ref(null);
+const eventsSection = ref(null);
 const closingSection = ref(null);
 
 const sections = [
@@ -193,6 +223,7 @@ const sections = [
   solutionSection,
   coursesSection,
   flowSection,
+  eventsSection,
   closingSection,
 ];
 
@@ -372,8 +403,8 @@ onUnmounted(() => {
 }
 
 /* Base Section Styling */
-.problem-section, .solution-section, .courses-section, .flow-section, .closing-section {
-  padding: 6rem 2rem;
+.problem-section, .solution-section, .courses-section, .flow-section, .closing-section, .events-section {
+  padding: 6rem 2rem 12rem 2rem; /* 下部パディングをさらに増やす */
   position: relative;
 }
 
@@ -592,6 +623,58 @@ onUnmounted(() => {
   color: rgba(255, 255, 255, 0.1);
 }
 
+/* Events Section */
+.events-section {
+  background-color: rgba(0,0,0,0.1);
+  padding-bottom: 6rem; /* ページネーションのためのスペースを確保 */
+}
+
+.swiper-container {
+  width: 100%;
+  padding: 2rem 0; /* 上下パディングを調整 */
+  position: relative;
+  min-height: 450px;
+  overflow: visible;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 380px !important;
+  max-width: 90%;
+}
+
+.no-events {
+  text-align: center;
+  color: #a0a0b0;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Custom Swiper Pagination */
+.swiper-pagination-custom {
+  position: absolute;
+  bottom: 20px; /* events-sectionの下端からの位置 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  z-index: 10; /* 他の要素より手前に表示 */
+}
+
+:deep(.swiper-pagination-bullet) {
+  background-color: #ffffff;
+  opacity: 0.4;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background-color: var(--primary-color);
+  opacity: 1;
+}
+
+
 /* 6. Closing Section */
 .closing-section {
   padding: 6rem 2rem;
@@ -641,7 +724,7 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .problem-section, .solution-section, .courses-section, .flow-section, .closing-section {
+  .problem-section, .solution-section, .courses-section, .flow-section, .closing-section, .events-section {
     padding: 4rem 1rem;
   }
 
@@ -651,7 +734,7 @@ onUnmounted(() => {
 
   .flow-steps { flex-direction: column; align-items: center; gap: 4rem; }
   .flow-step:not(:last-child)::after {
-    content: '\2193'; /* Unicode for down arrow */
+    content: '93'; /* Unicode for down arrow */
     right: 50%;
     transform: translateX(50%);
     top: auto;
