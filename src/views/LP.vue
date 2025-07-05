@@ -74,19 +74,22 @@
             <h4>個別指導〈単元保証型〉</h4>
             <p class="target">基礎から学びたい高校生</p>
             <p class="description">授業フォローから共テ演習まで。小テスト合格と目標点達成を保証します。</p>
-            <p class="price">32,000円 / コース</p>
+            <!-- <p class="price">32,000円 / コース</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
           <div class="course-card">
             <h4>個別指導〈フレキシブル〉</h4>
             <p class="target">高校生（経験者）</p>
             <p class="description">学校課題や疑問をその場で解決。必要な時に必要なだけ学べます。</p>
-            <p class="price">2,500円 / 1コマ</p>
+            <!-- <p class="price">2,500円 / 1コマ</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
           <div class="course-card">
             <h4>集団講座〈共テ対策・冬季集中〉</h4>
             <p class="target">高3生</p>
             <p class="description">共テ過去問・予想問題に集中して取り組み、得点力を一気に高めます。</p>
-            <p class="price">5,000円 / 1回</p>
+            <!-- <p class="price">5,000円 / 1回</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
         </div>
       </div>
@@ -98,19 +101,22 @@
             <h4>個別ブートキャンプ</h4>
             <p class="target">初心者 (中高生〜社会人)</p>
             <p class="description">Python/JSの基礎からミニアプリ開発まで。自作アプリの公開を目指します。</p>
-            <p class="price">36,000円 / コース</p>
+            <!-- <p class="price">36,000円 / コース</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
           <div class="course-card">
             <h4>個別サポート〈フレキシブル〉</h4>
             <p class="target">中高生〜社会人</p>
             <p class="description">コードレビューやバグ相談など、あなたの課題をその場で解決します。</p>
-            <p class="price">3,000円 / 1コマ</p>
+            <!-- <p class="price">3,000円 / 1コマ</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
           <div class="course-card">
             <h4>グループ開発ラボ</h4>
             <p class="target">経験者 (高校生〜社会人)</p>
             <p class="description">チームで企画から開発、公開までを体験。実践的な開発スキルが身につきます。</p>
-            <p class="price">49,800円 / コース</p>
+            <!-- <p class="price">49,800円 / コース</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
         </div>
       </div>
@@ -122,13 +128,15 @@
             <h4>生成AI活用ワークショップ</h4>
             <p class="target">高校生〜社会人</p>
             <p class="description">ChatGPT/Geminiなどを実演。明日からすぐに使える活用術を習得します。</p>
-            <p class="price">5,000円 / 回</p>
+            <!-- <p class="price">5,000円 / 回</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
           <div class="course-card">
             <h4>研究紹介セミナー</h4>
             <p class="target">高校生〜社会人</p>
             <p class="description">岩手大学の先輩による研究事例を紹介。あなたの探究心に火をつけます。</p>
-            <p class="price">無料</p>
+            <!-- <p class="price">無料</p> -->
+            <p class="price">Coming Soon...</p>
           </div>
         </div>
       </div>

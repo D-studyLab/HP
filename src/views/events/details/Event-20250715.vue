@@ -31,7 +31,7 @@
       <section>
         <h2>当日の流れ（60分）</h2>
         <ol class="timeline">
-          <li><span>5分</span>オープニング</li>
+          <li><span> 5分</span> オープニング</li>
           <li><span>10分</span>ライブ生成：タップゲーム → 全員でプレイ</li>
           <li><span>10分</span>ハンズオン①：ゲームを“暗記クイズアプリ”に改造</li>
           <li><span>10分</span>ハンズオン②：AIで教材まとめ・暗記カード自動作成</li>
@@ -79,15 +79,18 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  color: #333;
+  color: #e0e0e0; /* LP全体のテキストカラーに合わせる */
   line-height: 1.8;
+  background-color: rgba(15, 15, 30, 0.8); /* LPの背景色に近い色 */
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .event-flyer {
   width: 100%;
-  border-radius: 12px;
+  border-radius: 8px;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 h1 {
@@ -95,25 +98,36 @@ h1 {
   font-weight: bold;
   margin-bottom: 1rem;
   line-height: 1.4;
+  color: #ffffff;
 }
 
 .event-date-time {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #007bff;
-  margin-bottom: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
 }
 
 section {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 h2 {
   font-size: 1.8rem;
   font-weight: bold;
-  border-bottom: 3px solid #007bff;
+  border-bottom: 2px solid var(--primary-color);
   padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
+  color: #ffffff; /* 見出しの色を白に */
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
 }
 
 .points-table {
@@ -122,24 +136,22 @@ h2 {
 }
 
 .point-item {
-  background-color: #f9f9f9;
-  border-left: 5px solid #007bff;
+  background-color: rgba(255, 255, 255, 0.05); /* 少し透明な背景 */
+  border-left: 4px solid var(--primary-color);
   padding: 1rem 1.5rem;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .point-title {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
+  color: var(--primary-color);
 }
 
-ul, ol {
-  padding-left: 1.5rem;
-}
-
-li {
-  margin-bottom: 0.8rem;
+.point-desc {
+  font-size: 0.95rem;
+  color: #c0c0d0;
 }
 
 .timeline li {
@@ -149,37 +161,34 @@ li {
 }
 
 .timeline li span {
-  position: absolute;
-  left: -1rem;
-  top: 0;
   font-weight: bold;
-  color: #007bff;
-  background-color: #e7f3ff;
-  padding: 0.2rem 0.5rem;
-  border-radius: 5px;
+  color: var(--primary-color);
+  margin-right: 0.5rem; /* 時間と本文の間に余白を追加 */
 }
 
 .note {
   font-style: italic;
-  color: #555;
+  color: #a0a0b0;
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
 }
 
 .info-list li {
   list-style: none;
+  margin-bottom: 0.5rem;
 }
 
 .apply-section {
   text-align: center;
-  background-color: #e7f3ff;
+  background-color: rgba(0, 170, 255, 0.1); /* LPのCTAボタン背景色に近い色 */
   padding: 2rem;
   border-radius: 12px;
 }
 
 .apply-button {
   display: inline-block;
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   padding: 0.8rem 2.5rem;
   border-radius: 50px;
@@ -191,12 +200,13 @@ li {
 }
 
 .apply-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* ホバー時の色 */
   transform: translateY(-3px);
 }
 
 a {
-  color: #007bff;
+  color: var(--primary-color);
+  text-decoration: none;
 }
 
 a:hover {

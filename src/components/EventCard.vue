@@ -66,8 +66,7 @@ const formatDate = (dateString) => {
 }
 
 .event-date {
-  margin: 0;
-  color: #666;
-  margin-top: auto; /* 日付を常に下部に配置 */
+  margin-top: auto; /* 日付を常に下部に配置 */  
+  color: var(--text-color); /* LPのテキストカラーに合わせる */
 }
 </style>
