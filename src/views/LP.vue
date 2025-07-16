@@ -67,80 +67,20 @@
       <h2 class="section-title">コース一覧</h2>
       <p class="section-description">入会金・施設利用料はいつでも0円。あなたの目的に合わせて選べます。</p>
 
-      <div class="course-category">
-        <h3>情報Ⅰ 共通テスト対策</h3>
+      <div v-for="category in courseCategories" :key="category.name" class="course-category">
+        <h3>{{ category.name }}</h3>
         <div class="course-cards">
-          <div class="course-card">
-            <h4>個別指導〈単元保証型〉</h4>
-            <p class="target">基礎から学びたい高校生</p>
-            <p class="description">授業フォローから共テ演習まで。小テスト合格と目標点達成を保証します。</p>
-            <!-- <p class="price">32,000円 / コース</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-          <div class="course-card">
-            <h4>個別指導〈フレキシブル〉</h4>
-            <p class="target">高校生（経験者）</p>
-            <p class="description">学校課題や疑問をその場で解決。必要な時に必要なだけ学べます。</p>
-            <!-- <p class="price">2,500円 / 1コマ</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-          <div class="course-card">
-            <h4>集団講座〈共テ対策・冬季集中〉</h4>
-            <p class="target">高3生</p>
-            <p class="description">共テ過去問・予想問題に集中して取り組み、得点力を一気に高めます。</p>
-            <!-- <p class="price">5,000円 / 1回</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="course-category">
-        <h3>プログラミング学習</h3>
-        <div class="course-cards">
-          <div class="course-card">
-            <h4>個別ブートキャンプ</h4>
-            <p class="target">初心者 (中高生〜社会人)</p>
-            <p class="description">Python/JSの基礎からミニアプリ開発まで。自作アプリの公開を目指します。</p>
-            <!-- <p class="price">36,000円 / コース</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-          <div class="course-card">
-            <h4>個別サポート〈フレキシブル〉</h4>
-            <p class="target">中高生〜社会人</p>
-            <p class="description">コードレビューやバグ相談など、あなたの課題をその場で解決します。</p>
-            <!-- <p class="price">3,000円 / 1コマ</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-          <div class="course-card">
-            <h4>グループ開発ラボ</h4>
-            <p class="target">経験者 (高校生〜社会人)</p>
-            <p class="description">チームで企画から開発、公開までを体験。実践的な開発スキルが身につきます。</p>
-            <!-- <p class="price">49,800円 / コース</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="course-category">
-        <h3>短期集中セミナー</h3>
-        <div class="course-cards">
-          <div class="course-card">
-            <h4>生成AI活用ワークショップ</h4>
-            <p class="target">高校生〜社会人</p>
-            <p class="description">ChatGPT/Geminiなどを実演。明日からすぐに使える活用術を習得します。</p>
-            <!-- <p class="price">5,000円 / 回</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
-          <div class="course-card">
-            <h4>研究紹介セミナー</h4>
-            <p class="target">高校生〜社会人</p>
-            <p class="description">岩手大学の先輩による研究事例を紹介。あなたの探究心に火をつけます。</p>
-            <!-- <p class="price">無料</p> -->
-            <p class="price">Coming Soon...</p>
-          </div>
+          <CourseCard
+            v-for="course in category.courses"
+            :key="course.id"
+            :course="course"
+            @course-click="openModal"
+          />
         </div>
       </div>
     </section>
+
+    <CourseModal :show="isModalVisible" :course="selectedCourse" @close="closeModal" />
 
     <!-- 5. 受講の流れ -->
     <section ref="flowSection" class="flow-section fade-in-section">
@@ -208,13 +148,45 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { events } from '@/data/events.js';
+import { courses } from '@/data/courses.js'; // インポート
 import EventCard from '@/components/EventCard.vue';
+import CourseCard from '@/components/CourseCard.vue'; // インポート
+import CourseModal from '@/components/CourseModal.vue'; // インポート
+
+// Modal State
+const isModalVisible = ref(false);
+const selectedCourse = ref(null);
+
+const openModal = (course) => {
+  selectedCourse.value = course;
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+  selectedCourse.value = null;
+};
+
+// Course Categories
+const courseCategories = computed(() => {
+  const categories = {};
+  courses.forEach(course => {
+    if (!categories[course.category]) {
+      categories[course.category] = [];
+    }
+    categories[course.category].push(course);
+  });
+  return Object.keys(categories).map(name => ({
+    name,
+    courses: categories[name]
+  }));
+});
 
 // Scroll Animation
 const heroSection = ref(null);
@@ -417,7 +389,7 @@ onUnmounted(() => {
 }
 
 /* Glassmorphism Cards */
-.problem-card, .feature-card, .course-card {
+.problem-card, .feature-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
@@ -429,7 +401,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-.problem-card:hover, .feature-card:hover, .course-card:hover {
+.problem-card:hover, .feature-card:hover {
   transform: translateY(-10px);
   border-color: var(--primary-color);
   box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
@@ -508,45 +480,6 @@ onUnmounted(() => {
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
-}
-
-.course-card {
-  width: 380px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
-.course-card h4 {
-  font-size: clamp(1.3rem, 2vw, 1.5rem);
-  margin-bottom: 0.5rem;
-  color: var(--primary-color);
-  line-height: 1.3; /* 行間調整 */
-}
-
-.course-card .target {
-  font-weight: bold;
-  color: #ff9f61;
-  margin-bottom: 1rem;
-  line-height: 1.4; /* 行間調整 */
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
-}
-
-.course-card .description {
-  font-size: clamp(0.85rem, 1.3vw, 1rem);
-  line-height: 1.6; /* 行間調整 */
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
-  color: #c0c0d0;
-  word-break: break-word; /* 長い単語の改行 */
-}
-
-.course-card .price {
-  font-size: clamp(1.4rem, 2.5vw, 1.6rem);
-  font-weight: bold;
-  text-align: right;
-  color: var(--title-color);
-  line-height: 1.2; /* 行間調整 */
 }
 
 /* 5. Flow Section */
