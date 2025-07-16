@@ -731,7 +731,7 @@ onUnmounted(() => {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1350px) {
   .problem-section, .solution-section, .courses-section, .flow-section, .closing-section, .events-section {
     padding: 4rem 1rem;
   }
@@ -742,11 +742,13 @@ onUnmounted(() => {
 
   .flow-steps { flex-direction: column; align-items: center; gap: 4rem; }
   .flow-step:not(:last-child)::after {
-    content: '93'; /* Unicode for down arrow */
+    content: '↓';
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    opacity: 0.5;
     right: 50%;
     transform: translateX(50%);
     top: auto;
-    bottom: -55px;
   }
   .flow-step:not(:last-child):hover::after {
     transform: translateX(50%) translateY(5px);
