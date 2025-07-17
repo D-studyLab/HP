@@ -22,11 +22,11 @@
       </div>
 
       <ul class="nav-list">
-        <li><button @click="goto('/#top')">Top</button></li>
-        <li><button @click="goto('/#about')">About</button></li>
-        <li><button @click="goto('/#services')">Services</button></li>
-        <li><button @click="goto('/#events')">News</button></li>
-        <li><button @click="goto('/#contact')">Contact</button></li>
+        <li v-for="item in navItems" :key="item.hash">
+          <button :class="{ active: activeSection === item.hash }" @click="goto(item.path)">
+            {{ item.name }}
+          </button>
+        </li>
       </ul>
     </nav>
 
@@ -65,11 +65,11 @@
 
           <nav class="drawer-nav">
             <ul>
-              <li><button @click="goto('/#top')">Top</button></li>
-              <li><button @click="goto('/#about')">About</button></li>
-              <li><button @click="goto('/#services')">Services</button></li>
-              <li><button @click="goto('/#events')">News</button></li>
-              <li><button @click="goto('/#contact')">Contact</button></li>
+              <li v-for="item in navItems" :key="item.hash">
+                <button :class="{ active: activeSection === item.hash }" @click="goto(item.path)">
+                  {{ item.name }}
+                </button>
+              </li>
             </ul>
           </nav>
         </div>
@@ -84,34 +84,83 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { useRouter } from 'vue-router'
   import logo from './assets/D-studyLab_logo.png'
 
   const isMobile = ref(window.innerWidth < 768)
   const drawer = ref(false)
   const router = useRouter()
-  const route = useRoute()
+
+  // --- Navigation --- //
+  const navItems = [
+    { name: 'トップ', path: '/#top', hash: '#top' },
+    { name: 'D-study Labとは', path: '/#about', hash: '#about' },
+    { name: 'コース', path: '/#services', hash: '#services' },
+    { name: 'イベント', path: '/#events', hash: '#events' },
+    { name: 'お問い合わせ', path: '/#contact', hash: '#contact' }
+  ]
+  const activeSection = ref('#top')
+
+  let observer
+  const setupObserver = () => {
+    if (observer) observer.disconnect()
+
+    const container = document.querySelector('.content')
+    if (!container) return
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            activeSection.value = `#${entry.target.id}`
+          }
+        })
+      },
+      { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 }
+    )
+
+    navItems.forEach((item) => {
+      const element = document.querySelector(item.hash)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+  }
+
+  onMounted(() => {
+    nextTick(setupObserver)
+    window.addEventListener('resize', onResize)
+  })
+
+  onBeforeUnmount(() => {
+    if (observer) observer.disconnect()
+    window.removeEventListener('resize', onResize)
+  })
 
   function onResize() {
     isMobile.value = window.innerWidth < 768
     if (!isMobile.value) drawer.value = false
   }
-  onMounted(() => window.addEventListener('resize', onResize))
-  onBeforeUnmount(() => window.removeEventListener('resize', onResize))
 
   async function goto(path) {
     drawer.value = false
-    await router.push(path)
+    const targetHash = path.substring(path.indexOf('#'))
+    const targetElement = document.querySelector(targetHash)
+    const container = document.querySelector('.content')
 
-    if (path.includes('#')) {
-      const hash = path.substring(path.indexOf('#'))
-      await new Promise(resolve => setTimeout(resolve, 50));
-      const target = document.querySelector(hash)
-      const container = document.querySelector('.content')
-      if (container && target) {
+    if (targetElement && container) {
+      container.scrollTo({
+        top: targetElement.offsetTop,
+        behavior: 'smooth'
+      })
+    } else {
+      await router.push(path.split('#')[0])
+      await nextTick()
+      const newTargetElement = document.querySelector(targetHash)
+      if (newTargetElement && container) {
         container.scrollTo({
-          top: target.offsetTop,
+          top: newTargetElement.offsetTop,
           behavior: 'smooth'
         })
       }
@@ -218,20 +267,26 @@
     margin: 0;
     padding: 0;
     display: flex;
+    align-items: center;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
   }
   .nav-list button {
     color: #fff;
     font-size: 1.05rem;
-    text-align: left;
+    text-align: center;
     transition:
       color 0.25s,
       transform 0.25s;
   }
   .nav-list button:hover {
-    color: #00b79d;
+    color: var(--primary-color);
     transform: translateX(6px);
+  }
+  .nav-list button.active {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--primary-color);
   }
 
   /* ---------- SP：ヘッダー + LP を縦 flex で並べる ---------- */
@@ -346,7 +401,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: center;
     width: 100%;
   }
@@ -379,5 +434,11 @@
   }
   .drawer-nav button:hover::before {
     left: 100%;
+  }
+  .drawer-nav button.active {
+    color: var(--primary-color);
+    font-weight: bold;
+    background: rgba(0, 170, 255, 0.1);
+    box-shadow: inset 0 0 10px rgba(0, 170, 255, 0.2);
   }
 </style>
