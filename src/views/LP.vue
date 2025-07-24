@@ -62,6 +62,18 @@
       </div>
     </section>
 
+    <!-- 講師紹介 -->
+    <section id="lecturers" ref="lecturersSection" class="lecturers-section fade-in-section">
+      <h2 class="section-title">講師紹介</h2>
+      <div class="lecturer-cards">
+        <LecturerCard
+          v-for="lecturer in lecturers"
+          :key="lecturer.id"
+          :lecturer="lecturer"
+        />
+      </div>
+    </section>
+
     <!-- 4. コース紹介 -->
     <section id="services" ref="coursesSection" class="courses-section fade-in-section">
       <h2 class="section-title">コース一覧</h2>
@@ -155,9 +167,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { events } from '@/data/events.js';
 import { courses } from '@/data/courses.js'; // インポート
+import { lecturers } from '@/data/lecturers.js'; // 追加
 import EventCard from '@/components/EventCard.vue';
 import CourseCard from '@/components/CourseCard.vue'; // インポート
 import CourseModal from '@/components/CourseModal.vue'; // インポート
+import LecturerCard from '@/components/LecturerCard.vue'; // 追加
 
 // Modal State
 const isModalVisible = ref(false);
@@ -192,6 +206,7 @@ const courseCategories = computed(() => {
 const heroSection = ref(null);
 const problemSection = ref(null);
 const solutionSection = ref(null);
+const lecturersSection = ref(null); // 追加
 const coursesSection = ref(null);
 const flowSection = ref(null);
 const eventsSection = ref(null);
@@ -201,6 +216,7 @@ const sections = [
   heroSection,
   problemSection,
   solutionSection,
+  lecturersSection, // 追加
   coursesSection,
   flowSection,
   eventsSection,
@@ -457,6 +473,19 @@ onUnmounted(() => {
   margin-bottom: 1rem;
   color: var(--title-color);
   line-height: 1.4; /* 行間調整 */
+}
+
+/* 講師紹介セクション */
+.lecturers-section {
+  padding: 6rem 2rem;
+}
+
+.lecturer-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 4rem;
 }
 
 /* 4. Courses Section */

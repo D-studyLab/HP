@@ -96,6 +96,7 @@
   const navItems = [
     { name: 'トップ', path: '/#top', hash: '#top' },
     { name: 'D-study Labとは', path: '/#about', hash: '#about' },
+    { name: '講師紹介', path: '/#lecturers', hash: '#lecturers' },
     { name: 'コース', path: '/#services', hash: '#services' },
     { name: 'イベント', path: '/#events', hash: '#events' },
     { name: 'お問い合わせ', path: '/#contact', hash: '#contact' }

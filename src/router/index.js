@@ -2,6 +2,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LP from '../views/LP.vue'
 import EventsTemplate from '../views/events/EventsTemplate.vue';
+import LecturersView from '../views/LecturersView.vue';
+import LecturerDetail from '../views/lecturers/LecturerDetail.vue';
 
 const routes = [
   {
@@ -13,6 +15,16 @@ const routes = [
     path: '/events/:id',
     name: 'EventDetail',
     component: EventsTemplate,
+  },
+  {
+    path: '/lecturers',
+    name: 'Lecturers',
+    component: LecturersView,
+  },
+  {
+    path: '/lecturers/:id',
+    name: 'LecturerDetail',
+    component: LecturerDetail,
   },
 ]
 
