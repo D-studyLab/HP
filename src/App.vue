@@ -84,13 +84,14 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
   import logo from './assets/D-studyLab_logo.png'
 
   const isMobile = ref(window.innerWidth < 768)
   const drawer = ref(false)
   const router = useRouter()
+  const route = useRoute() // 追加
 
   // --- Navigation --- //
   const navItems = [
@@ -98,6 +99,7 @@
     { name: 'D-study Labとは', path: '/#about', hash: '#about' },
     { name: '講師紹介', path: '/#lecturers', hash: '#lecturers' },
     { name: 'コース', path: '/#services', hash: '#services' },
+    { name: '受講までの流れ', path: '/#flow', hash: '#flow' },
     { name: 'イベント', path: '/#events', hash: '#events' },
     { name: 'お問い合わせ', path: '/#contact', hash: '#contact' }
   ]
@@ -138,6 +140,11 @@
     if (observer) observer.disconnect()
     window.removeEventListener('resize', onResize)
   })
+
+  // ルートの変更を監視してオブザーバーを再設定
+  watch(() => route.path, () => {
+    nextTick(setupObserver);
+  });
 
   function onResize() {
     isMobile.value = window.innerWidth < 768

@@ -95,7 +95,7 @@
     <CourseModal :show="isModalVisible" :course="selectedCourse" @close="closeModal" />
 
     <!-- 5. 受講の流れ -->
-    <section ref="flowSection" class="flow-section fade-in-section">
+    <section id="flow" ref="flowSection" class="flow-section fade-in-section">
       <h2 class="section-title">受講までの簡単4ステップ</h2>
       <ol class="flow-steps">
         <li class="flow-step">
