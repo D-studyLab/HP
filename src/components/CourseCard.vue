@@ -4,6 +4,9 @@
     <p class="target">{{ course.target }}</p>
     <p class="description">{{ course.description }}</p>
     <p class="price">{{ course.price }}</p>
+    <div class="overlay">
+      <span class="overlay-text">詳細を見る</span>
+    </div>
   </div>
 </template>
 
@@ -24,6 +27,7 @@ const emitClick = () => {
 
 <style scoped>
 .course-card {
+  position: relative;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
@@ -76,6 +80,31 @@ const emitClick = () => {
   text-align: right;
   color: var(--title-color);
   line-height: 1.2;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.overlay-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.course-card:hover .overlay {
+  opacity: 1;
 }
 
 @media (max-width: 1020px) {
