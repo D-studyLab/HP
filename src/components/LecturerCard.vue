@@ -1,23 +1,27 @@
 <template>
-  <router-link :to="`/lecturers/${lecturer.id}`" class="lecturer-card">
+  <div @click="showDetails" class="lecturer-card">
     <img :src="lecturer.photo" :alt="lecturer.name" class="lecturer-photo" />
     <div class="lecturer-info">
       <h3 class="lecturer-name">{{ lecturer.name }}</h3>
       <p class="lecturer-title">{{ lecturer.title }}</p>
       <p class="lecturer-catchphrase">{{ lecturer.catchphrase }}</p>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-
 defineProps({
   lecturer: {
     type: Object,
     required: true
   }
 });
+
+const emit = defineEmits(['show-details']);
+
+const showDetails = () => {
+  emit('show-details');
+};
 </script>
 
 <style scoped>

@@ -1,31 +1,45 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
+import MainLayout from '../layouts/MainLayout.vue'
+import BlogLayout from '../layouts/BlogLayout.vue'
 import LP from '../views/LP.vue'
-import EventsTemplate from '../views/events/EventsTemplate.vue';
-import LecturersView from '../views/LecturersView.vue';
-import LecturerDetail from '../views/lecturers/LecturerDetail.vue';
+import ActivityTemplate from '../views/activities/ActivityTemplate.vue'
+import BlogIndex from '../views/blog/BlogIndex.vue'
+import BlogPost from '../views/blog/BlogPost.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'LP',
-    component: LP,
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'LP',
+        component: LP,
+      },
+      {
+        path: 'activities/:id',
+        name: 'ActivityDetail',
+        component: ActivityTemplate,
+      },
+    ]
   },
   {
-    path: '/events/:id',
-    name: 'EventDetail',
-    component: EventsTemplate,
-  },
-  {
-    path: '/lecturers',
-    name: 'Lecturers',
-    component: LecturersView,
-  },
-  {
-    path: '/lecturers/:id',
-    name: 'LecturerDetail',
-    component: LecturerDetail,
-  },
+    path: '/blog',
+    component: BlogLayout,
+    children: [
+      {
+        path: '',
+        name: 'BlogIndex',
+        component: BlogIndex,
+      },
+      {
+        path: ':slug',
+        name: 'BlogPost',
+        component: BlogPost,
+      },
+    ]
+  }
 ]
 
 const router = createRouter({

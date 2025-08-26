@@ -13,14 +13,14 @@
 <script setup>
 import { ref, onMounted, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
-import { events } from '@/data/events.js';
+import { activities } from '@/data/activities.js';
 
 const route = useRoute();
 const eventComponent = shallowRef(null);
 
 onMounted(async () => {
   const eventId = route.params.id;
-  const event = events.find(e => e.id === eventId);
+  const event = activities.find(e => e.id === eventId);
   if (event && typeof event.component === 'function') {
     const componentModule = await event.component();
     eventComponent.value = componentModule.default;

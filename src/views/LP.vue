@@ -67,12 +67,13 @@
       <h2 class="section-title">講師紹介</h2>
       <div class="lecturer-cards">
         <LecturerCard
-          v-for="lecturer in lecturers"
-          :key="lecturer.id"
-          :lecturer="lecturer"
+          :lecturer="mainLecturer"
+          @show-details="openLecturerModal"
         />
       </div>
     </section>
+
+    <LecturerModal :show="isLecturerModalVisible" :lecturer="mainLecturer" @close="closeLecturerModal" />
 
     <!-- 4. コース紹介 -->
     <section id="services" ref="coursesSection" class="courses-section fade-in-section">
@@ -86,13 +87,13 @@
             v-for="course in category.courses"
             :key="course.id"
             :course="course"
-            @course-click="openModal"
+            @course-click="openCourseModal"
           />
         </div>
       </div>
     </section>
 
-    <CourseModal :show="isModalVisible" :course="selectedCourse" @close="closeModal" />
+    <CourseModal :show="isCourseModalVisible" :course="selectedCourse" @close="closeCourseModal" />
 
     <!-- 5. 受講の流れ -->
     <section id="flow" ref="flowSection" class="flow-section fade-in-section">
@@ -117,26 +118,37 @@
       </ol>
     </section>
 
-    <!-- News & Events Section -->
-    <section id="events" ref="eventsSection" class="events-section fade-in-section">
-      <h2 class="section-title">News & Events</h2>
-      <div v-if="events.length > 0" class="swiper-container">
+    <!-- Activities Section -->
+    <section id="activities" ref="activitiesSection" class="activities-section fade-in-section">
+      <h2 class="section-title">活動実績</h2>
+      <div class="activity-tabs">
+        <button
+          v-for="category in activityCategories"
+          :key="category"
+          :class="{ active: selectedCategory === category }"
+          @click="selectedCategory = category"
+        >
+          {{ category }}
+        </button>
+      </div>
+
+      <div v-if="filteredActivities.length > 0" class="swiper-container">
         <swiper
           :slides-per-view="'auto'"
           :space-between="30"
           :centered-slides="true"
-          :loop="events.length > 1"
-          :modules="[Pagination]"
-          :pagination="{ el: '.swiper-pagination-custom', clickable: true }"
+          :loop="filteredActivities.length > 1"
+          :modules="[Mousewheel]"
+          :mousewheel="true"
+          :grab-cursor="true"
         >
-          <swiper-slide v-for="event in events" :key="event.id">
-            <EventCard :event="event" />
+          <swiper-slide v-for="activity in filteredActivities" :key="activity.id">
+            <ActivityCard :activity="activity" />
           </swiper-slide>
         </swiper>
-        <div class="swiper-pagination-custom"></div> <!-- カスタムページネーション要素 -->
       </div>
       <div v-else class="no-events">
-        <p>現在、新しいイベントはありません。しばらくお待ちください。</p>
+        <p>該当する活動はありません。</p>
       </div>
     </section>
 
@@ -162,30 +174,54 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Pagination } from 'swiper/modules';
+import { Mousewheel } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
-import { events } from '@/data/events.js';
-import { courses } from '@/data/courses.js'; // インポート
-import { lecturers } from '@/data/lecturers.js'; // 追加
-import EventCard from '@/components/EventCard.vue';
-import CourseCard from '@/components/CourseCard.vue'; // インポート
-import CourseModal from '@/components/CourseModal.vue'; // インポート
-import LecturerCard from '@/components/LecturerCard.vue'; // 追加
+import { activities } from '@/data/activities.js';
+import { courses } from '@/data/courses.js';
+import { lecturers } from '@/data/lecturers.js';
+import ActivityCard from '@/components/ActivityCard.vue';
+import CourseCard from '@/components/CourseCard.vue';
+import CourseModal from '@/components/CourseModal.vue';
+import LecturerCard from '@/components/LecturerCard.vue';
+import LecturerModal from '@/components/LecturerModal.vue';
 
-// Modal State
-const isModalVisible = ref(false);
+// --- Activities Section ---
+const activityCategories = ['すべて', 'イベント', '開発実績', '活動レポート'];
+const selectedCategory = ref('すべて');
+
+const filteredActivities = computed(() => {
+  if (selectedCategory.value === 'すべて') {
+    return activities;
+  }
+  return activities.filter(activity => activity.category === selectedCategory.value);
+});
+
+// --- Course Modal State ---
+const isCourseModalVisible = ref(false);
 const selectedCourse = ref(null);
 
-const openModal = (course) => {
+const openCourseModal = (course) => {
   selectedCourse.value = course;
-  isModalVisible.value = true;
+  isCourseModalVisible.value = true;
 };
 
-const closeModal = () => {
-  isModalVisible.value = false;
+const closeCourseModal = () => {
+  isCourseModalVisible.value = false;
   selectedCourse.value = null;
 };
+
+// --- Lecturer Modal State ---
+const isLecturerModalVisible = ref(false);
+const mainLecturer = lecturers[0]; // There is only one lecturer
+
+const openLecturerModal = () => {
+  isLecturerModalVisible.value = true;
+};
+
+const closeLecturerModal = () => {
+  isLecturerModalVisible.value = false;
+};
+
 
 // Course Categories
 const courseCategories = computed(() => {
@@ -209,7 +245,7 @@ const solutionSection = ref(null);
 const lecturersSection = ref(null); // 追加
 const coursesSection = ref(null);
 const flowSection = ref(null);
-const eventsSection = ref(null);
+const activitiesSection = ref(null);
 const closingSection = ref(null);
 
 const sections = [
@@ -219,7 +255,7 @@ const sections = [
   lecturersSection, // 追加
   coursesSection,
   flowSection,
-  eventsSection,
+  activitiesSection,
   closingSection,
 ];
 
@@ -593,8 +629,40 @@ onUnmounted(() => {
   color: rgba(255, 255, 255, 0.1);
 }
 
-/* Events Section */
-.events-section {
+/* Activities Section */
+.activity-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.activity-tabs button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+.activity-tabs button:hover {
+  background: rgba(0, 170, 255, 0.2);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.activity-tabs button.active {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 0 15px var(--primary-color);
+}
+
+/* Activities Section */
+.activities-section {
   background-color: rgba(0,0,0,0.1);
   padding-bottom: 6rem; /* ページネーションのためのスペースを確保 */
 }
@@ -605,6 +673,27 @@ onUnmounted(() => {
   position: relative;
   min-height: 450px;
   overflow: visible;
+}
+
+.swiper-container::before,
+.swiper-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px; /* Adjust width of the fade */
+  z-index: 2;
+  pointer-events: none; /* Allows clicking through the fade */
+}
+
+.swiper-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+.swiper-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-color), transparent);
 }
 
 .swiper-slide {
