@@ -1,13 +1,21 @@
 <template>
   <div class="blog-index">
-    <h1>ブログ</h1>
+    <header class="blog-header">
+      <h1>D-study Lab Blog</h1>
+      <p>ようこそ！岩手から、ITと教育の未来について発信するブログです。</p>
+    </header>
     <div class="post-list">
       <router-link v-for="post in posts" :key="post.slug" :to="`/blog/${post.slug}`" class="post-card-link">
         <div class="post-card">
-          <h2>{{ post.title }}</h2>
-          <p class="post-date">{{ post.date }}</p>
-          <p>{{ post.excerpt }}</p>
-          <span class="read-more">続きを読む</span>
+          <div class="card-image">
+            <img :src="post.thumbnail" :alt="post.title" />
+          </div>
+          <div class="card-content">
+            <h2>{{ post.title }}</h2>
+            <p class="post-date">{{ post.date }}</p>
+            <p class="excerpt">{{ post.excerpt }}</p>
+            <span class="read-more">続きを読む →</span>
+          </div>
         </div>
       </router-link>
     </div>
@@ -37,22 +45,36 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Basic styling for the blog index */
 .blog-index {
-  max-width: 800px;
+  max-width: 1200px; /* Widen the layout for a richer feel */
   margin: 0 auto;
-  /* Padding and other layout styles are handled by BlogLayout.vue */
 }
 
-h1 {
-  color: #d9534f; /* Red accent */
+.blog-header {
   text-align: center;
-  margin-bottom: 2rem;
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 4rem;
+}
+
+.blog-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.blog-header p {
+  font-size: 1.2rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
 }
 
 .post-list {
   display: grid;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin: 2rem;
 }
 
 .post-card-link {
@@ -62,31 +84,71 @@ h1 {
 }
 
 .post-card {
-  border: 1px solid #ddd;
-  padding: 1.5rem;
-  border-radius: 8px;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .post-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.post-card h2 {
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.post-card:hover .card-image img {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content h2 {
   margin-top: 0;
-  color: #333;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #212529;
+  line-height: 1.4;
 }
 
 .post-date {
-  color: #777;
-  font-size: 0.9rem;
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.excerpt {
+  flex-grow: 1;
+  color: #495057;
+  line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .read-more {
   color: #d9534f;
-  text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  align-self: flex-end;
+  margin-top: auto;
 }
 </style>

@@ -2,6 +2,7 @@
 title: '2番目の投稿'
 date: '2025-08-23'
 excerpt: 'これは2番目の投稿です。Swiperのスライダーについて書きます。'
+thumbnail: '/event-20250715-tovlab.png'
 ---
 
 ## Swiper.jsについて
