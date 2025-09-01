@@ -251,4 +251,11 @@ const filteredPosts = computed(() => {
   background: #fff;
   border-radius: 12px;
 }
+
+@media (max-width: 768px) {
+  .search-bar input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
 </style>
