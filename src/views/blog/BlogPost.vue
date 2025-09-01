@@ -107,12 +107,13 @@ watch(post, (newPost) => {
     // Inject in-article ad
     const adCode = '<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-9384193584221337" data-ad-slot="5514230604"></ins>';
     const originalHtml = newPost.html;
-    const headings = originalHtml.split('</h2>');
+    const sections = originalHtml.split('<h2>');
     let finalHtml = originalHtml;
 
-    if (headings.length > 2) { // Insert after 2nd h2
-      headings.splice(2, 0, adCode);
-      finalHtml = headings.join('</h2>');
+    // Place the ad before the 3rd h2 heading, if it exists.
+    if (sections.length > 2) {
+      sections[2] = adCode + sections[2];
+      finalHtml = sections.join('<h2>');
     }
     contentWithAds.value = finalHtml;
 
