@@ -85,7 +85,7 @@ watch(() => route.params.slug, loadPost);
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .post-header-image img {
@@ -111,7 +111,7 @@ watch(() => route.params.slug, loadPost);
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.2;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 15px rgba(0,0,0,0.7);
 }
 
 .post-header-content .post-date {
