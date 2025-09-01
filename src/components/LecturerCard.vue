@@ -11,6 +11,9 @@
       <p class="lecturer-title">{{ lecturer.title }}</p>
       <p class="lecturer-catchphrase">{{ lecturer.catchphrase }}</p>
     </div>
+    <div class="overlay">
+      <span class="overlay-text">詳細を見る</span>
+    </div>
   </div>
 </template>
 
@@ -31,6 +34,7 @@ const showDetails = () => {
 
 <style scoped>
 .lecturer-card {
+  position: relative; /* Added for overlay positioning */
   display: flex;
   flex-direction: column;
   background: var(--glass-bg);
@@ -47,6 +51,10 @@ const showDetails = () => {
 .lecturer-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(0, 170, 255, 0.3);
+}
+
+.lecturer-card:hover .overlay {
+  opacity: 1;
 }
 
 .lecturer-header {
@@ -102,5 +110,26 @@ const showDetails = () => {
   font-size: 1rem;
   color: var(--text-color);
   line-height: 1.6;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.overlay-text {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 </style>
