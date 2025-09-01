@@ -7,7 +7,7 @@ export const lecturers = [
     furigana: 'でんどう ふみや',
     title: 'D-study Lab 代表 / 岩手大学大学院 M2',
     catchphrase: '挑戦する人を増やしたい。',
-    photo: '/src/assets/chara_icon2.png',
+    photo: '/chara_icon2.png',
 
     profile: {
       origin: '岩手県盛岡市出身。岩手大学大学院 理工学専攻 デザイン・メディア工学コースに在籍中。',

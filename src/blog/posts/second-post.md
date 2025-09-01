@@ -2,7 +2,7 @@
 title: 早送りしたくなる理由 by ChatGPTのエージェントモード
 date: '2025-09-01'
 excerpt: '私は「最近、動画やアニメを早送り／スキップしたくなる」をテーマに、ChatGPTのエージェントモードへ執筆を依頼しました。指示（制限）→できあがった記事→ところどころの筆者ツッコミ→最後に任せてみた感想、の順でまとめます。'
-thumbnail: '/src/assets/blog2.png'
+thumbnail: '/blog2.png'
 category: 'AI'
 ---
 

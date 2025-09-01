@@ -17,7 +17,7 @@
     <!-- サイドナビ -->
     <nav class="sidenav">
       <div class="logo-container" @click="goto('/')">
-        <img :src="logo" class="logo-img" alt="logo" />
+        <img src="/D-studyLab_logo.png" class="logo-img" alt="logo" />
         <h2 class="logo-title">D-StudyLab</h2>
       </div>
 
@@ -41,7 +41,7 @@
     <!-- ヘッダー（文書フロー内。スクロールしたら一緒に流れる） -->
     <header class="sp-header">
       <div class="logo-container" @click="goto('/')">
-        <img :src="logo" class="sp-logo" alt="logo" />
+        <img src="/D-studyLab_logo.png" class="sp-logo" alt="logo" />
         <h2 class="logo-title">D-StudyLab</h2>
       </div>
       <button class="hamburger" @click="drawer = true"><i class="fas fa-bars"></i></button>
@@ -86,7 +86,7 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import logo from '../assets/D-studyLab_logo.png'
+  
 
   const isMobile = ref(window.innerWidth < 768)
   const drawer = ref(false)

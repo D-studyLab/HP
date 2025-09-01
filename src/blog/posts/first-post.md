@@ -2,7 +2,7 @@
 title: '個人ブログはじめます！'
 date: '2025-08-29'
 excerpt: 'D-study LabのHPから来てくれた方へ。ここではゲーム・アニメ、アニソン/ボカロ/J-POP、AIや便利ツール、勉強やガジェット、旅行、日常の疑問を等身大で綴ります。'
-thumbnail: '/src/assets/pen_pc_coff.png'
+thumbnail: '/pen_pc_coff.png'
 category: 'その他'
 ---
 
