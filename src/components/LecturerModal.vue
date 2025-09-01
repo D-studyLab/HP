@@ -19,23 +19,19 @@
 
           <div class="detail-section">
             <h3><i class="fas fa-user-tie"></i>プロフィール</h3>
-            <p><strong>出身:</strong> {{ lecturer.profile.origin }}</p>
-            <p><strong>これまでの歩み:</strong> {{ lecturer.profile.history }}</p>
-            <p><strong>D-studyLabへの思い:</strong> {{ lecturer.profile.passion }}</p>
+            <p><strong>出身:</strong> <br> {{ lecturer.profile.origin }}</p>
+            <p><strong>これまでの歩み:</strong> <br> {{ lecturer.profile.history }}</p>
+            <p><strong>D-studyLabへの思い:</strong> <br> {{ lecturer.profile.passion }}</p>
           </div>
 
           <div class="detail-section">
             <h3><i class="fas fa-trophy"></i>実績</h3>
             <ul>
-              <li v-for="(achievement, index) in lecturer.achievements" :key="index">{{ achievement }}</li>
+              <li v-for="(achievement, index) in lecturer.achievements" :key="index" v-html="achievement"></li>
             </ul>
           </div>
 
-          <div class="detail-section">
-            <h3><i class="fas fa-mug-hot"></i>パーソナル</h3>
-            <h4>{{ lecturer.personal.title }}</h4>
-            <p>{{ lecturer.personal.description }}</p>
-          </div>
+          
 
           <div class="detail-section message-section">
             <h3><i class="fas fa-envelope"></i>メッセージ</h3>
