@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import fm from 'front-matter';
 
 const posts = ref([]);
@@ -56,6 +56,30 @@ const searchQuery = ref('');
 const selectedCategory = ref(null);
 
 onMounted(async () => {
+  document.title = 'dendenのブログ';
+
+  // Add JSON-LD structured data for the Blog
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    'name': 'dendenのブログ',
+    'url': 'https://d-studylab.jp/blog',
+    'description': 'D-study Lab代表の個人ブログ。ゲーム・アニメ、音楽、ITツール、勉強法、日常の疑問などを綴ります。',
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'D-study Lab',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://d-studylab.jp/D-studyLab_logo.png'
+      }
+    }
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'blog-json-ld'; // Add an ID for easy removal
+  script.text = JSON.stringify(jsonLd);
+  document.head.appendChild(script);
+
   const modules = import.meta.glob('@/blog/posts/*.md', { query: '?raw', import: 'default' });
   const postPromises = Object.entries(modules).map(async ([path, loader]) => {
     const slug = path.split('/').pop().replace('.md', '');
@@ -67,6 +91,14 @@ onMounted(async () => {
   const resolvedPosts = await Promise.all(postPromises);
   resolvedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
   posts.value = resolvedPosts;
+});
+
+onUnmounted(() => {
+  // Clean up structured data script when component is destroyed
+  const script = document.getElementById('blog-json-ld');
+  if (script) {
+    document.head.removeChild(script);
+  }
 });
 
 const categories = computed(() => {

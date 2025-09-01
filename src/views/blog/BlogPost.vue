@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import fm from 'front-matter';
 import { marked } from 'marked';
@@ -35,7 +35,7 @@ const loadPost = async () => {
     const rawContent = await import(`@/blog/posts/${slug}.md?raw`);
     const { attributes, body } = fm(rawContent.default);
     const html = await marked.parse(body);
-    post.value = { ...attributes, html };
+    post.value = { ...attributes, html, slug };
   } catch (e) {
     console.error('Error loading post:', e);
     // Here you could redirect to a 404 page
@@ -47,6 +47,60 @@ onMounted(loadPost);
 // Watch for route changes to load new posts if the user navigates
 // between posts without leaving the component.
 watch(() => route.params.slug, loadPost);
+
+// Watch for post data changes to update metadata
+watch(post, (newPost) => {
+  // Clean up old script first
+  const oldScript = document.getElementById('blog-post-json-ld');
+  if (oldScript) {
+    oldScript.remove();
+  }
+
+  if (newPost) {
+    document.title = `${newPost.title} - dendenのブログ`;
+
+    // Add JSON-LD structured data for the BlogPosting
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': `https://d-studylab.jp/blog/${newPost.slug}`
+      },
+      'headline': newPost.title,
+      'image': `https://d-studylab.jp${newPost.thumbnail}`,
+      'datePublished': newPost.date,
+      'dateModified': newPost.date,
+      'author': {
+        '@type': 'Person',
+        'name': 'denden'
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'D-study Lab',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': 'https://d-studylab.jp/D-studyLab_logo.png'
+        }
+      },
+      'description': newPost.excerpt
+    };
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'blog-post-json-ld';
+    script.text = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+  }
+}, { immediate: true });
+
+onUnmounted(() => {
+  // Clean up structured data script when component is destroyed
+  const script = document.getElementById('blog-post-json-ld');
+  if (script) {
+    script.remove();
+  }
+});
+
 </script>
 
 <style scoped>

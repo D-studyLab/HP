@@ -161,6 +161,15 @@
     { immediate: true } // immediate オプションを追加して初回読み込み時にも実行
   )
 
+  // Set document title for main site
+  watch(
+    () => route.path,
+    () => {
+      document.title = 'D-study Lab｜盛岡の情報Ⅰ＆プログラミング専門塾';
+    },
+    { immediate: true }
+  )
+
   function onResize() {
     isMobile.value = window.innerWidth < 768
     if (!isMobile.value) drawer.value = false
