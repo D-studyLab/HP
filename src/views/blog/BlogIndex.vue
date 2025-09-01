@@ -1,32 +1,59 @@
 <template>
   <div class="blog-index">
-    <header class="blog-header">
-      <h1>D-study Lab Blog</h1>
-      <p>ようこそ！岩手から、ITと教育の未来について発信するブログです。</p>
+    <header class="page-header">
+      <h1>dendenのブログ</h1>
+      <p>D-study Lab のHPから来てくれた方、ようこそ。ここは私の素の部分や日々のメモを置いていく場所です。肩の力を抜いて読んでもらえたら嬉しいです。</p>
     </header>
-    <div class="post-list">
-      <router-link v-for="post in posts" :key="post.slug" :to="`/blog/${post.slug}`" class="post-card-link">
+
+    <div class="controls-container">
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" v-model="searchQuery" placeholder="記事を検索..." />
+      </div>
+      <div class="category-filters">
+        <button @click="selectedCategory = null" :class="{ active: selectedCategory === null }">
+          すべて
+        </button>
+        <button
+          v-for="category in categories"
+          :key="category"
+          @click="selectedCategory = category"
+          :class="{ active: selectedCategory === category }"
+        >
+          {{ category }}
+        </button>
+      </div>
+    </div>
+
+    <div class="post-grid">
+      <router-link v-for="post in filteredPosts" :key="post.slug" :to="`/blog/${post.slug}`" class="post-card-link">
         <div class="post-card">
-          <div class="card-image">
+          <div class="card-thumbnail">
             <img :src="post.thumbnail" :alt="post.title" />
           </div>
           <div class="card-content">
-            <h2>{{ post.title }}</h2>
-            <p class="post-date">{{ post.date }}</p>
-            <p class="excerpt">{{ post.excerpt }}</p>
-            <span class="read-more">続きを読む →</span>
+            <h3 class="card-title">{{ post.title }}</h3>
+            <div class="card-meta">
+              <span class="card-date">{{ post.date }}</span>
+              <span class="card-category">{{ post.category }}</span>
+            </div>
           </div>
         </div>
       </router-link>
+    </div>
+    <div v-if="filteredPosts.length === 0" class="no-results">
+      <p>該当する記事が見つかりませんでした。</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import fm from 'front-matter';
 
 const posts = ref([]);
+const searchQuery = ref('');
+const selectedCategory = ref(null);
 
 onMounted(async () => {
   const modules = import.meta.glob('@/blog/posts/*.md', { query: '?raw', import: 'default' });
@@ -38,117 +65,190 @@ onMounted(async () => {
   });
 
   const resolvedPosts = await Promise.all(postPromises);
-  // Sort posts by date, newest first
   resolvedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
   posts.value = resolvedPosts;
+});
+
+const categories = computed(() => {
+  const allCategories = posts.value.map(post => post.category).filter(Boolean);
+  return [...new Set(allCategories)];
+});
+
+const filteredPosts = computed(() => {
+  let filtered = posts.value;
+
+  if (selectedCategory.value) {
+    filtered = filtered.filter(post => post.category === selectedCategory.value);
+  }
+
+  if (searchQuery.value) {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(post =>
+      post.title.toLowerCase().includes(lowerCaseQuery) ||
+      (post.excerpt && post.excerpt.toLowerCase().includes(lowerCaseQuery))
+    );
+  }
+
+  return filtered;
 });
 </script>
 
 <style scoped>
 .blog-index {
-  max-width: 1200px; /* Widen the layout for a richer feel */
-  margin: 0 auto;
+  width: 100%;
 }
 
-.blog-header {
-  text-align: center;
-  padding: 4rem 2rem;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  margin-bottom: 4rem;
+.page-header {
+  margin-bottom: 2rem;
 }
 
-.blog-header h1 {
-  font-size: 3rem;
+.page-header h1 {
+  font-size: 2.5rem;
   font-weight: 700;
   color: #212529;
 }
 
-.blog-header p {
-  font-size: 1.2rem;
+.page-header p {
+  font-size: 1.1rem;
   color: #6c757d;
   margin-top: 0.5rem;
 }
 
-.post-list {
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.search-bar {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #adb5bd;
+}
+
+.search-bar input {
+  width: 90%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1px solid #dee2e6;
+  border-radius: 2rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #d9534f;
+  box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.2);
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.category-filters button {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.category-filters button.active {
+  background-color: #d9534f;
+  color: #fff;
+  border-color: #d9534f;
+}
+
+.post-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2.5rem;
-  margin: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .post-card-link {
   text-decoration: none;
   color: inherit;
-  display: block;
 }
 
 .post-card {
-  background-color: #fff;
+  background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .post-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
-.card-image {
+.card-thumbnail {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
 }
 
-.card-image img {
+.card-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s;
 }
 
-.post-card:hover .card-image img {
+.post-card:hover .card-thumbnail img {
   transform: scale(1.05);
 }
 
 .card-content {
-  padding: 1.5rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
 }
 
-.card-content h2 {
-  margin-top: 0;
-  font-size: 1.3rem;
+.card-title {
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #212529;
   line-height: 1.4;
+  margin: 0 0 0.5rem 0;
+  /* Clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3.08em; /* 1.1rem * 1.4 * 2 */
 }
 
-.post-date {
-  color: #6c757d;
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 0.85rem;
-  margin-bottom: 1rem;
-  margin-top: 0.5rem;
+  color: #6c757d;
 }
 
-.excerpt {
-  flex-grow: 1;
-  color: #495057;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+.card-category {
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
-.read-more {
-  color: #d9534f;
-  font-weight: 600;
-  align-self: flex-end;
-  margin-top: auto;
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 12px;
 }
 </style>

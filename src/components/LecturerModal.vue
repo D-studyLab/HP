@@ -3,13 +3,15 @@
     <div v-if="show" class="modal-overlay" @click.self="close">
       <div class="modal-content" role="dialog" aria-modal="true">
         <div class="modal-header">
-          <h2 class="modal-title">{{ lecturer.name }}</h2>
+          <h2 class="modal-title"></h2>
           <button class="close-button" @click="close" aria-label="閉じる">&times;</button>
         </div>
         <div class="modal-body">
           <div class="main-profile">
             <img :src="lecturer.photo" :alt="lecturer.name" class="lecturer-photo-large" />
             <div class="main-info">
+              <h3 class="lecturer-name-large">{{ lecturer.name }}</h3>
+              <p class="lecturer-furigana-modal">({{ lecturer.furigana }})</p>
               <p class="lecturer-title">{{ lecturer.title }}</p>
               <p class="lecturer-catchphrase">{{ lecturer.catchphrase }}</p>
             </div>
@@ -114,6 +116,8 @@ const close = () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 1rem;
 }
 
 .close-button {
@@ -132,8 +136,9 @@ const close = () => {
 }
 
 .modal-title {
-  font-size: 2rem;
-  color: var(--primary-color);
+  font-size: 1.2rem;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
 .modal-body {
@@ -157,21 +162,40 @@ const close = () => {
   object-fit: cover;
   margin-right: 2rem;
   border: 4px solid var(--primary-color);
+  flex-shrink: 0;
 }
 
 .main-info {
-    flex: 1;
+  flex: 1;
+}
+
+.lecturer-name-large {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.lecturer-furigana-modal {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #c0c0d0;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .lecturer-title {
   font-size: 1.2rem;
   color: var(--primary-color);
-  margin: 0.5rem 0;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
 }
 
 .lecturer-catchphrase {
   font-size: 1.1rem;
   font-style: italic;
+  color: var(--text-color);
 }
 
 .detail-section {
@@ -191,10 +215,10 @@ const close = () => {
 }
 
 .detail-section h4 {
-    font-size: 1.2rem;
-    color: var(--title-color);
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--title-color);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .detail-section p,
@@ -241,7 +265,6 @@ const close = () => {
   background-color: #0056b3;
 }
 
-
 /* --- Mobile First Bottom Sheet --- */
 @media (max-width: 768px) {
   .modal-overlay {
@@ -258,19 +281,39 @@ const close = () => {
     border-top: 1px solid var(--primary-color);
     box-shadow: 0 -10px 30px rgba(0, 170, 255, 0.3);
   }
-  .modal-title { font-size: 1.5rem; }
-  .lecturer-photo-large { width: 80px; height: 80px; margin-right: 1rem;}
-  .lecturer-title { font-size: 1rem; }
-  .lecturer-catchphrase { font-size: 0.9rem; }
-  .detail-section h3 { font-size: 1.3rem; }
-  .detail-section p, .detail-section li { font-size: 0.9rem; }
+  .modal-title {
+    font-size: 1.2rem;
+  }
+  .lecturer-name-large {
+    font-size: 1.5rem;
+  }
+  .lecturer-photo-large {
+    width: 80px;
+    height: 80px;
+    margin-right: 1rem;
+  }
+  .lecturer-title {
+    font-size: 1rem;
+  }
+  .lecturer-catchphrase {
+    font-size: 0.9rem;
+  }
+  .detail-section h3 {
+    font-size: 1.3rem;
+  }
+  .detail-section p,
+  .detail-section li {
+    font-size: 0.9rem;
+  }
 }
 
 /* --- Animation --- */
-.modal-fade-enter-active, .modal-fade-leave-active {
+.modal-fade-enter-active,
+.modal-fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.modal-fade-enter-from, .modal-fade-leave-to {
+.modal-fade-enter-from,
+.modal-fade-leave-to {
   opacity: 0;
 }
 

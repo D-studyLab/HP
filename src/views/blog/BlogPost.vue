@@ -13,10 +13,6 @@
       <main class="post-content">
         <div v-html="post.html" class="post-body"></div>
       </main>
-      <aside class="sidebar">
-        <h3>この記事を書いた人</h3>
-        <p>ここにプロフィールや新着記事が入ります。</p>
-      </aside>
     </div>
   </div>
   <div v-else class="loading-message">
@@ -127,99 +123,9 @@ watch(() => route.params.slug, loadPost);
 }
 
 .blog-post-layout {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 4rem;
-  max-width: 1100px;
+  max-width: 800px; /* Adjust for single column readability */
   margin: 0 auto;
-  padding: 0 2rem; /* Padding handled by parent layout, but some horizontal is good */
-}
-
-.post-content {
-  color: #333;
-  min-width: 0;
-}
-
-.post-body {
-  line-height: 1.8;
-  font-size: 1.1rem;
-  overflow-wrap: break-word;
-}
-
-:deep(.post-body h2),
-:deep(.post-body h3) {
-  color: #212529;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #dee2e6;
-}
-
-:deep(.post-body p) {
-  margin-bottom: 1.5rem;
-}
-
-:deep(.post-body ul),
-:deep(.post-body ol) {
-  padding-left: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-:deep(.post-body pre) {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 0.95rem;
-  border: 1px solid #e9ecef;
-}
-
-:deep(.post-body code) {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-}
-
-:deep(.post-body blockquote) {
-  border-left: 4px solid #d9534f;
-  padding-left: 1.5rem;
-  margin: 2rem 0;
-  color: #6c757d;
-  font-style: italic;
-}
-
-:deep(.post-body img) {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin: 2rem 0;
-}
-
-.sidebar {
-  padding: 2rem;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  align-self: start;
-  position: sticky;
-  top: 120px; /* Adjust based on header height */
-}
-
-.sidebar h3 {
-  margin-top: 0;
-  border-bottom: 2px solid #dee2e6;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .blog-post-layout {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  .sidebar {
-    position: static;
-    top: auto;
-    margin-top: 3rem;
-  }
+  padding: 0rem 2rem 2rem 2rem;
 }
 
 @media (max-width: 768px) {
@@ -230,5 +136,69 @@ watch(() => route.params.slug, loadPost);
   .blog-post-layout {
     padding: 0 1rem;
   }
+}
+
+.post-body :deep(h1) {
+  font-size: 2.2rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-body :deep(h2) {
+  font-size: 1.8rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-body :deep(h3) {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-body :deep(p) {
+  line-height: 1.9;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-body :deep(a) {
+  color: #1a73e8;
+  text-decoration: none;
+  border-bottom: 1px solid #1a73e8;
+}
+
+.post-body :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.post-body :deep(pre) {
+  background-color: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.post-body :deep(code) {
+  font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  background-color: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+.post-body :deep(pre > code) {
+  padding: 0;
+  background-color: transparent;
+}
+
+.post-body :deep(blockquote) {
+  border-left: 4px solid #e0e0e0;
+  padding-left: 1.5rem;
+  margin: 0 0 1.5rem;
+  color: #666;
 }
 </style>
