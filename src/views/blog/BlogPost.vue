@@ -11,7 +11,19 @@
     </header>
     <div class="blog-post-layout">
       <main class="post-content">
-        <div v-html="post.html" class="post-body"></div>
+        <div v-html="contentWithAds" class="post-body"></div>
+
+        <div class="ad-container-bottom" style="margin-top: 4rem;">
+          <hr style="border: none; border-top: 1px solid #eee; margin: 2rem 0;">
+          <p style="text-align:center; font-size:0.8rem; color:#6c757d; margin-bottom: 1rem;">Advertisement</p>
+          <!-- blog_bottom -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-9384193584221337"
+               data-ad-slot="2364298010"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
       </main>
     </div>
   </div>
@@ -21,13 +33,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUnmounted } from 'vue';
+import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import fm from 'front-matter';
 import { marked } from 'marked';
 
 const route = useRoute();
 const post = ref(null);
+const contentWithAds = ref(''); // For ad injection
 
 const loadPost = async () => {
   try {
@@ -48,9 +61,9 @@ onMounted(loadPost);
 // between posts without leaving the component.
 watch(() => route.params.slug, loadPost);
 
-// Watch for post data changes to update metadata
+// Watch for post data changes to update metadata and inject ads
 watch(post, (newPost) => {
-  // Clean up old script first
+  // Clean up old structured data script first
   const oldScript = document.getElementById('blog-post-json-ld');
   if (oldScript) {
     oldScript.remove();
@@ -90,6 +103,30 @@ watch(post, (newPost) => {
     script.id = 'blog-post-json-ld';
     script.text = JSON.stringify(jsonLd);
     document.head.appendChild(script);
+
+    // Inject in-article ad
+    const adCode = '<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-9384193584221337" data-ad-slot="5514230604"></ins>';
+    const originalHtml = newPost.html;
+    const headings = originalHtml.split('</h2>');
+    let finalHtml = originalHtml;
+
+    if (headings.length > 2) { // Insert after 2nd h2
+      headings.splice(2, 0, adCode);
+      finalHtml = headings.join('</h2>');
+    }
+    contentWithAds.value = finalHtml;
+
+    // Push the ad
+    nextTick(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error('AdSense push error: ', e);
+      }
+    });
+
+  } else {
+    contentWithAds.value = '';
   }
 }, { immediate: true });
 
@@ -100,7 +137,6 @@ onUnmounted(() => {
     script.remove();
   }
 });
-
 </script>
 
 <style scoped>

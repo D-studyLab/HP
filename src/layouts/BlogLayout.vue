@@ -34,7 +34,13 @@
         <div class="sidebar-widget ad-widget">
           <h3 class="widget-title">Advertisement</h3>
           <div class="ad-placeholder">
-            <p>広告スペース</p>
+            <!-- blog_sidebar -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9384193584221337"
+                 data-ad-slot="4310079707"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
           </div>
         </div>
       </aside>
@@ -46,9 +52,20 @@
 </template>
 
 <script setup>
+import { onMounted, nextTick } from 'vue';
 import { lecturers } from '@/data/lecturers.js';
 // 講師が複数いる場合も想定し、最初の講師を著者とする
 const author = lecturers[0];
+
+onMounted(() => {
+  nextTick(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense push error: ', e);
+    }
+  });
+});
 </script>
 
 <style>
