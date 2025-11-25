@@ -10,10 +10,10 @@
       </div>
     </header>
     <div class="blog-post-layout">
-      <main class="post-content">
+      <main class="post-content" ref="postContentRef">
         <div v-html="contentWithAds" class="post-body"></div>
 
-        <div class="ad-container-bottom" style="margin-top: 4rem;">
+        <div class="ad-container-bottom" style="margin-top: 4rem;" ref="adBottomContainerRef">
           <hr style="border: none; border-top: 1px solid #eee; margin: 2rem 0;">
           <p style="text-align:center; font-size:0.8rem; color:#6c757d; margin-bottom: 1rem;">Advertisement</p>
           <!-- blog_bottom -->
@@ -35,23 +35,43 @@
 <script setup>
 import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import fm from 'front-matter';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/firebase';
 import { marked } from 'marked';
 
 const route = useRoute();
 const post = ref(null);
 const contentWithAds = ref(''); // For ad injection
+const adBottomContainerRef = ref(null);
+const postContentRef = ref(null);
 
 const loadPost = async () => {
   try {
     const slug = route.params.slug;
-    const rawContent = await import(`@/blog/posts/${slug}.md?raw`);
-    const { attributes, body } = fm(rawContent.default);
-    const html = await marked.parse(body);
-    post.value = { ...attributes, html, slug };
+
+    // Firestore からスラッグでブログ記事を検索
+    const postsQuery = query(collection(db, 'blogPosts'), where('slug', '==', slug));
+    const querySnapshot = await getDocs(postsQuery);
+
+    if (!querySnapshot.empty) {
+      const docData = querySnapshot.docs[0].data();
+      const html = await marked.parse(docData.content || '');
+
+      post.value = {
+        title: docData.title,
+        date: docData.date?.toDate ? docData.date.toDate().toISOString().split('T')[0] : docData.date,
+        category: docData.category,
+        excerpt: docData.excerpt,
+        thumbnail: docData.thumbnail,
+        html: html,
+        slug: slug
+      };
+    } else {
+      console.error('記事が見つかりません');
+      // 404ページにリダイレクトできます
+    }
   } catch (e) {
     console.error('Error loading post:', e);
-    // Here you could redirect to a 404 page
   }
 };
 
@@ -117,13 +137,32 @@ watch(post, (newPost) => {
     }
     contentWithAds.value = finalHtml;
 
-    // Push the ad
+    // Push the ad and check visibility
     nextTick(() => {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch (e) {
         console.error('AdSense push error: ', e);
       }
+
+      setTimeout(() => {
+        // Check bottom ad
+        if (adBottomContainerRef.value) {
+          const adElement = adBottomContainerRef.value.querySelector('.adsbygoogle');
+          if (adElement && adElement.clientHeight < 1) {
+            adBottomContainerRef.value.style.display = 'none';
+          }
+        }
+        // Check in-article ads
+        if (postContentRef.value) {
+          const inArticleAds = postContentRef.value.querySelectorAll('.adsbygoogle');
+          inArticleAds.forEach(ad => {
+            if (ad.clientHeight < 1) {
+              ad.style.display = 'none';
+            }
+          });
+        }
+      }, 3000);
     });
 
   } else {

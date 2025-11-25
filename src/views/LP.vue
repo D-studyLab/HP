@@ -176,7 +176,8 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Mousewheel } from 'swiper/modules';
 import 'swiper/css';
-import { activities } from '@/data/activities.js';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/firebase';
 import { courses } from '@/data/courses.js';
 import { lecturers } from '@/data/lecturers.js';
 import ActivityCard from '@/components/ActivityCard.vue';
@@ -186,14 +187,15 @@ import LecturerCard from '@/components/LecturerCard.vue';
 import LecturerModal from '@/components/LecturerModal.vue';
 
 // --- Activities Section ---
+const activities = ref([]);
 const activityCategories = ['すべて', 'イベント', '開発実績', '活動レポート'];
 const selectedCategory = ref('すべて');
 
 const filteredActivities = computed(() => {
   if (selectedCategory.value === 'すべて') {
-    return activities;
+    return activities.value;
   }
-  return activities.filter(activity => activity.category === selectedCategory.value);
+  return activities.value.filter(activity => activity.category === selectedCategory.value);
 });
 
 // --- Course Modal State ---
@@ -261,7 +263,17 @@ const sections = [
 
 let observer;
 
-onMounted(() => {
+onMounted(async () => {
+  // Fetch activities from Firestore
+  try {
+    const activitiesQuery = query(collection(db, 'activities'), orderBy('date', 'desc'));
+    const querySnapshot = await getDocs(activitiesQuery);
+    activities.value = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error('活動実績の取得に失敗しました:', error);
+  }
+
+  // Setup scroll animations
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

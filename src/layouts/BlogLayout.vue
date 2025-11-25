@@ -31,7 +31,7 @@
             <a href="https://github.com/D-studyLab" target="_blank" class="sns-link"><i class="fab fa-github"></i> GitHub</a>
           </div>
         </div>
-        <div class="sidebar-widget ad-widget">
+        <div class="sidebar-widget ad-widget" ref="adWidgetRef">
           <h3 class="widget-title">Advertisement</h3>
           <div class="ad-placeholder">
             <!-- blog_sidebar -->
@@ -52,10 +52,11 @@
 </template>
 
 <script setup>
-import { onMounted, nextTick } from 'vue';
+import { onMounted, nextTick, ref } from 'vue';
 import { lecturers } from '@/data/lecturers.js';
 // 講師が複数いる場合も想定し、最初の講師を著者とする
 const author = lecturers[0];
+const adWidgetRef = ref(null);
 
 onMounted(() => {
   nextTick(() => {
@@ -65,6 +66,16 @@ onMounted(() => {
       console.error('AdSense push error: ', e);
     }
   });
+
+  // 3秒後に広告が表示されているかチェック
+  setTimeout(() => {
+    if (adWidgetRef.value) {
+      const adElement = adWidgetRef.value.querySelector('.adsbygoogle');
+      if (adElement && adElement.clientHeight < 1) {
+        adWidgetRef.value.style.display = 'none';
+      }
+    }
+  }, 3000);
 });
 </script>
 

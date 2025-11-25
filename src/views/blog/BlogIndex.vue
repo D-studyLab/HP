@@ -49,7 +49,8 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import fm from 'front-matter';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 const posts = ref([]);
 const searchQuery = ref('');
@@ -80,17 +81,22 @@ onMounted(async () => {
   script.text = JSON.stringify(jsonLd);
   document.head.appendChild(script);
 
-  const modules = import.meta.glob('@/blog/posts/*.md', { query: '?raw', import: 'default' });
-  const postPromises = Object.entries(modules).map(async ([path, loader]) => {
-    const slug = path.split('/').pop().replace('.md', '');
-    const content = await loader();
-    const { attributes } = fm(content);
-    return { ...attributes, slug };
-  });
-
-  const resolvedPosts = await Promise.all(postPromises);
-  resolvedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-  posts.value = resolvedPosts;
+  // Firestore からブログ記事を取得
+  try {
+    const postsQuery = query(collection(db, 'blogPosts'), orderBy('date', 'desc'));
+    const querySnapshot = await getDocs(postsQuery);
+    posts.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      slug: doc.data().slug,
+      title: doc.data().title,
+      date: doc.data().date?.toDate ? doc.data().date.toDate().toLocaleDateString('ja-JP') : doc.data().date,
+      category: doc.data().category,
+      excerpt: doc.data().excerpt,
+      thumbnail: doc.data().thumbnail
+    }));
+  } catch (error) {
+    console.error('記事の取得に失敗しました:', error);
+  }
 });
 
 onUnmounted(() => {
