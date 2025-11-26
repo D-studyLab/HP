@@ -192,10 +192,11 @@ const activityCategories = ['すべて', 'イベント', '開発実績', '活動
 const selectedCategory = ref('すべて');
 
 const filteredActivities = computed(() => {
+  let activitiesWithSlug = activities.value.filter(activity => activity.slug);
   if (selectedCategory.value === 'すべて') {
-    return activities.value;
+    return activitiesWithSlug;
   }
-  return activities.value.filter(activity => activity.category === selectedCategory.value);
+  return activitiesWithSlug.filter(activity => activity.category === selectedCategory.value);
 });
 
 // --- Course Modal State ---
@@ -268,7 +269,11 @@ onMounted(async () => {
   try {
     const activitiesQuery = query(collection(db, 'activities'), orderBy('date', 'desc'));
     const querySnapshot = await getDocs(activitiesQuery);
-    activities.value = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    activities.value = querySnapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      slug: doc.data().slug, 
+      ...doc.data() 
+    }));
   } catch (error) {
     console.error('活動実績の取得に失敗しました:', error);
   }

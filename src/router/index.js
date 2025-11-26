@@ -1,5 +1,8 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '@/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
+
 import MainLayout from '../layouts/MainLayout.vue'
 import BlogLayout from '../layouts/BlogLayout.vue'
 import LP from '../views/LP.vue'
@@ -14,6 +17,21 @@ import AdminDashboard from '../views/admin/AdminDashboard.vue'
 import BlogEditor from '../views/admin/BlogEditor.vue'
 import ActivityEditor from '../views/admin/ActivityEditor.vue'
 
+// Helper function to check auth state
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject
+    );
+  });
+};
+
+
 const routes = [
   {
     path: '/',
@@ -25,7 +43,7 @@ const routes = [
         component: LP,
       },
       {
-        path: 'activities/:id',
+        path: 'activities/:slug',
         name: 'ActivityDetail',
         component: ActivityTemplate,
       },
@@ -56,11 +74,13 @@ const routes = [
   {
     path: '/admin',
     component: AdminLayout,
-    beforeEnter: (to, from, next) => {
-      // Check if user is authenticated
-      if (localStorage.getItem('admin-auth') === 'true') {
+    beforeEnter: async (to, from, next) => {
+      const user = await getCurrentUser();
+      if (user) {
+        // User is logged in
         next();
       } else {
+        // No user is logged in
         next('/admin/login');
       }
     },

@@ -2,10 +2,12 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+import { getAnalytics } from "firebase/analytics";
 
-// Firebase configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIza8yC1NfBn3acyiR7vz0s_FMp-hoAMQ4ZqQclY",
+  apiKey: "AIzaSyC1NfBn3acyiR7vz0s_FMp-hoA4Q4ZqQcY",
   authDomain: "d-study-lab.firebaseapp.com",
   projectId: "d-study-lab",
   storageBucket: "d-study-lab.firebasestorage.app",
@@ -23,4 +25,11 @@ export const db = getFirestore(app);
 // Initialize Storage (画像アップロード用)
 export const storage = getStorage(app);
 
+// Initialize Auth
+export const auth = getAuth(app);
+
+// Initialize Analytics
+const analytics = getAnalytics(app);
+
 export default app;
+

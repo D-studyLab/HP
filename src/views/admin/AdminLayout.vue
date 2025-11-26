@@ -30,22 +30,41 @@
     </aside>
 
     <main class="admin-content">
-      <router-view />
+      <div :class="contentWrapperClass">
+        <router-view />
+      </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase';
 
+const route = useRoute();
 const router = useRouter();
 
-const logout = () => {
+const logout = async () => {
   if (confirm('ログアウトしますか？')) {
-    localStorage.removeItem('admin-auth');
-    router.push('/admin/login');
+    try {
+      await signOut(auth);
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      alert('ログアウトに失敗しました。');
+    }
   }
 };
+
+const contentWrapperClass = computed(() => {
+  const editorRoutes = ['BlogNew', 'BlogEdit', 'ActivityNew', 'ActivityEdit'];
+  if (editorRoutes.includes(route.name)) {
+    return 'content-wrapper is-editor';
+  }
+  return 'content-wrapper';
+});
 </script>
 
 <style scoped>
@@ -62,6 +81,7 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .sidebar-header {
@@ -143,7 +163,16 @@ const logout = () => {
 .admin-content {
   flex: 1;
   overflow-y: auto;
+  height: 100vh;
+}
+
+.content-wrapper {
   padding: 2rem;
+}
+
+.content-wrapper.is-editor {
+  padding: 0;
+  height: 100%;
 }
 
 @media (max-width: 768px) {

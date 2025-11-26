@@ -31,12 +31,9 @@ const imageStyle = computed(() => ({
 }));
 
 const handleClick = () => {
-  if (!props.activity.link) return;
-
-  if (props.activity.target === '_blank') {
-    window.open(props.activity.link, '_blank', 'noopener,noreferrer');
-  } else {
-    router.push(props.activity.link);
+  // If a slug exists, navigate to the detail page.
+  if (props.activity.slug) {
+    router.push(`/activities/${props.activity.slug}`);
   }
 };
 </script>
