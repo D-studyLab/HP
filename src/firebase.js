@@ -7,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC1NfBn3acyiR7vz0s_FMp-hoA4Q4ZqQcY",
-  authDomain: "d-study-lab.firebaseapp.com",
-  projectId: "d-study-lab",
-  storageBucket: "d-study-lab.firebasestorage.app",
-  messagingSenderId: "788560603186",
-  appId: "1:788560603186:web:1b76e3eabf1acca931742b",
-  measurementId: "G-GRY24CYF65"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
